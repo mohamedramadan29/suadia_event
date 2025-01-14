@@ -4,8 +4,72 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0ad1f473193b3feb98972000beec0da4",
+    "content-hash": "19e4498fea01b283bfacb2d657f2fabc",
     "packages": [
+        {
+            "name": "anhskohbo/no-captcha",
+            "version": "3.6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/anhskohbo/no-captcha.git",
+                "reference": "6f129419a7f0d0a1ed9849fdaaed34e6d83a03cc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/anhskohbo/no-captcha/zipball/6f129419a7f0d0a1ed9849fdaaed34e6d83a03cc",
+                "reference": "6f129419a7f0d0a1ed9849fdaaed34e6d83a03cc",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.2|^7.0",
+                "illuminate/support": "^5.0|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
+                "php": ">=5.5.5"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.8|^9.5.10|^10.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "NoCaptcha": "Anhskohbo\\NoCaptcha\\Facades\\NoCaptcha"
+                    },
+                    "providers": [
+                        "Anhskohbo\\NoCaptcha\\NoCaptchaServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Anhskohbo\\NoCaptcha\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "anhskohbo",
+                    "email": "anhskohbo@gmail.com"
+                }
+            ],
+            "description": "No CAPTCHA reCAPTCHA For Laravel.",
+            "keywords": [
+                "captcha",
+                "laravel",
+                "laravel4",
+                "laravel5",
+                "laravel6",
+                "no-captcha",
+                "recaptcha"
+            ],
+            "support": {
+                "issues": "https://github.com/anhskohbo/no-captcha/issues",
+                "source": "https://github.com/anhskohbo/no-captcha/tree/3.6.0"
+            },
+            "time": "2024-03-13T02:22:17+00:00"
+        },
         {
             "name": "brick/math",
             "version": "0.12.1",
@@ -1053,6 +1117,53 @@
                 }
             ],
             "time": "2023-12-03T19:50:20+00:00"
+        },
+        {
+            "name": "ichtrojan/laravel-otp",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ichtrojan/laravel-otp.git",
+                "reference": "0c12316ccf6f051cac81d6be418ad6f68689d4b9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ichtrojan/laravel-otp/zipball/0c12316ccf6f051cac81d6be418ad6f68689d4b9",
+                "reference": "0c12316ccf6f051cac81d6be418ad6f68689d4b9",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Otp": "Ichtrojan\\Otp\\Otp"
+                    },
+                    "providers": [
+                        "Ichtrojan\\Otp\\OtpServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Ichtrojan\\Otp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Michael Okoh",
+                    "email": "michael@okoh.co.uk"
+                }
+            ],
+            "description": "A simple package to generate and validate OTPs",
+            "support": {
+                "issues": "https://github.com/ichtrojan/laravel-otp/issues",
+                "source": "https://github.com/ichtrojan/laravel-otp/tree/v2.0.0"
+            },
+            "time": "2023-12-24T22:16:55+00:00"
         },
         {
             "name": "laravel/framework",
@@ -3297,6 +3408,60 @@
                 }
             ],
             "time": "2024-04-27T21:32:50+00:00"
+        },
+        {
+            "name": "redot/laravel-toastify",
+            "version": "v1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/redot-src/laravel-toastify.git",
+                "reference": "9c3216ec561637b8a3478ac6f5a5abf2917a7d47"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/redot-src/laravel-toastify/zipball/9c3216ec561637b8a3478ac6f5a5abf2917a7d47",
+                "reference": "9c3216ec561637b8a3478ac6f5a5abf2917a7d47",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^10.0|^11.0",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.10"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Redot\\LaravelToastify\\LaravelToastifyServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Redot\\LaravelToastify\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Abdelrhman Said",
+                    "email": "abdelrhmansaidzaki@hotmail.com"
+                }
+            ],
+            "description": "A simple package to use toastify.js in laravel applications",
+            "support": {
+                "issues": "https://github.com/redot-src/laravel-toastify/issues",
+                "source": "https://github.com/redot-src/laravel-toastify/tree/v1.0.4"
+            },
+            "time": "2024-06-07T14:14:37+00:00"
         },
         {
             "name": "symfony/clock",
