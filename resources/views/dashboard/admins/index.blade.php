@@ -40,6 +40,7 @@
                                                     <th> الاسم </th>
                                                     <th> البريد الالكتروني </th>
                                                     <th> رقم الهاتف </th>
+                                                    <th> نوع الموظف </th>
                                                     <th> الصلاحية </th>
                                                     <th> الحالة </th>
                                                     <th> العمليات </th>
@@ -48,13 +49,16 @@
                                             <tbody>
                                                 @forelse ($admins as $admin)
                                                     <tr>
-                                                        <th scope="row">{{ $admin->iteration }}</th>
+                                                        <th scope="row">{{ $loop->iteration }}</th>
                                                         <td> {{ $admin->name }} </td>
                                                         <td>
                                                             {{ $admin->email }}
                                                         </td>
                                                         <td>
                                                             {{ $admin->phone }}
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge badge-success"> {{ $admin->type }} </span>
                                                         </td>
                                                         <td>
                                                             {{ $admin->role->role }}

@@ -1,5 +1,8 @@
 @extends('dashboard.layouts.app')
 @section('title', ' الفواتير ')
+@section('css')
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/admin/') }}/vendors/css/tables/datatable/datatables.min.css">
+@endsection
 @section('content')
     <div class="app-content content">
         <div class="content-wrapper">
@@ -34,7 +37,8 @@
                             <div class="card-content collapse show">
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table class="table table-bordered table-striped">
+                                        <table class="table table-striped table-bordered zero-configuration dataTable"
+                                            id="DataTables_Table_0">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
@@ -43,6 +47,8 @@
                                                     <th> العنوان </th>
                                                     <th> المشاكل </th>
                                                     <th> الحالة </th>
+                                                    <th> الاستقبال </th>
+                                                    <th> الفني </th>
                                                     <th> العمليات </th>
                                                 </tr>
                                             </thead>
@@ -64,24 +70,70 @@
                                                             @endforeach
                                                         </td>
                                                         <td>
-                                                            <span class="badge badge-info">
-                                                                {{ $invoice->status }}
-                                                            </span>
+                                                            @if ($invoice->status == 'تم الاصلاح')
+                                                                <span class="badge badge-success">
+                                                                    {{ $invoice->status }}
+                                                                </span>
+                                                            @elseif($invoice->status == 'لم يتم الاصلاح')
+                                                                <span class="badge badge-danger">
+                                                                    {{ $invoice->status }}
+                                                                </span>
+                                                            @elseif($invoice->status == 'تحت الصيانة')
+                                                                <span class="badge badge-warning">
+                                                                    {{ $invoice->status }}
+                                                                </span>
+                                                            @else
+                                                                <span class="badge badge-info">
+                                                                    {{ $invoice->status }}
+                                                                </span>
+                                                            @endif
+
                                                         </td>
                                                         <td>
-                                                            <a class="btn btn-info btn-sm"
-                                                                href="{{ route('dashboard.invoices.update', $invoice->id) }}"><i
-                                                                    class="la la-edit"></i> تعديل </a>
-                                                            <button type="button" class="btn btn-danger btn-sm"
-                                                                data-toggle="modal"
-                                                                data-target="#delete_invoice_{{ $invoice->id }}">
-                                                                حذف <i class="la la-trash"></i>
-                                                            </button>
+                                                            {{ $invoice->Recieved->name }}
+                                                        </td>
+                                                        <td>
+                                                            @if (!$invoice->admin_repair_id)
+                                                                لا يوجد
+                                                                <button class="btn btn-warning btn-sm" type="button"
+                                                                    data-toggle="modal"
+                                                                    data-target="#add_tech_invoice_{{ $invoice->id }}">
+                                                                    تعين فني </button>
+                                                            @else
+                                                                {{ $invoice->Technical->name }}
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            <div class="mb-1 mr-1 btn-group">
+                                                                <button type="button"
+                                                                    class="btn btn-primary btn-block dropdown-toggle btn-sm"
+                                                                    data-toggle="dropdown" aria-haspopup="true"
+                                                                    aria-expanded="false">
+                                                                    العمليات
+                                                                </button>
+                                                                <div class="dropdown-menu open-left arrow"
+                                                                    x-placement="bottom-start"
+                                                                    style="position: absolute; transform: translate3d(0px, 40px, 0px); top: 0px; left: 0px; will-change: transform;">
+                                                                    <a href="{{ route('dashboard.invoices.update', $invoice->id) }}"
+                                                                        class="dropdown-item" type="button"> تعديل </a>
+                                                                    <a href="{{ route('dashboard.invoices.print', $invoice->id) }}"
+                                                                        class="dropdown-item" type="button"> طباعة </a>
+                                                                    <a href="{{ route('dashboard.invoices.steps', $invoice->id) }}"
+                                                                        class="dropdown-item" type="button"> حركة حساب
+                                                                        الفاتورة </a>
+                                                                    <button class="dropdown-item" type="button"
+                                                                        data-toggle="modal"
+                                                                        data-target="#delete_invoice_{{ $invoice->id }}">
+                                                                        حذف </button>
+
+                                                                </div>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                     <div class="form-group">
                                                     </div>
                                                     @include('dashboard.invoices.delete')
+                                                    @include('dashboard.invoices.add_tech_invoice')
                                                 @empty
                                                     <td colspan="4"> لا يوجد بيانات </td>
                                                 @endforelse
@@ -101,4 +153,42 @@
     </div>
 
 
+@endsection
+
+
+
+@section('js')
+    <script src="{{ asset('assets/admin/') }}/vendors/js/tables/datatable/datatables.min.js" type="text/javascript">
+    </script>
+    <script src="{{ asset('assets/admin/') }}/js/scripts/tables/datatables/datatable-basic.js" type="text/javascript">
+    </script>
+    <script>
+        $(document).ready(function() {
+            if (!$.fn.DataTable.isDataTable('#DataTables_Table_0')) {
+                $('#DataTables_Table_0').DataTable({
+                    language: {
+                        processing: "جاري المعالجة...",
+                        search: "بحث:",
+                        lengthMenu: "عرض _MENU_ سجل لكل صفحة",
+                        info: "عرض _START_ إلى _END_ من أصل _TOTAL_ سجل",
+                        infoEmpty: "عرض 0 إلى 0 من أصل 0 سجل",
+                        infoFiltered: "(تمت تصفيته من إجمالي _MAX_ سجلات)",
+                        loadingRecords: "جاري التحميل...",
+                        zeroRecords: "لا توجد سجلات مطابقة",
+                        emptyTable: "لا توجد بيانات متاحة في الجدول",
+                        paginate: {
+                            first: "الأول",
+                            previous: "السابق",
+                            next: "التالي",
+                            last: "الأخير"
+                        },
+                        aria: {
+                            sortAscending: ": تفعيل لترتيب العمود تصاعدياً",
+                            sortDescending: ": تفعيل لترتيب العمود تنازلياً"
+                        }
+                    }
+                });
+            }
+        });
+    </script>
 @endsection

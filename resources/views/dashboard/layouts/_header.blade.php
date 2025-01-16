@@ -7,10 +7,10 @@
                 <li class="mr-auto nav-item mobile-menu d-md-none"><a class="nav-link nav-menu-main menu-toggle hidden-xs"
                         href="#"><i class="ft-menu font-large-1"></i></a></li>
                 <li class="mr-auto nav-item">
-                    <a class="navbar-brand" href="index.html">
+                    <a class="navbar-brand" href="{{ url('/') }}">
                         <img class="brand-logo" alt="modern admin logo"
-                            src="{{ asset('assets/admin/') }}/images/logo/logo.png">
-                        <h3 class="brand-text">Modern Admin</h3>
+                            src="{{ asset('assets/admin/') }}/images/logo_mobile.png">
+                        <h3 class="brand-text"> بصمة الاهتمام  </h3>
                     </a>
                 </li>
                 <li class="float-right nav-item d-none d-md-block"><a class="pr-0 nav-link modern-nav-toggle"

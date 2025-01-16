@@ -52,8 +52,8 @@
                     <li class="nav-item">
                         <a class="navbar-brand" href="#">
                             <img class="brand-logo" alt="modern admin logo"
-                                src="{{ asset('assets/admin') }}/images/logo/logo.png">
-                            <h3 class="brand-text"> اسم الموقع  </h3>
+                                src="{{ asset('assets/admin/') }}/images/logo_mobile.png">
+                            <h3 class="brand-text"> بصمة الاهتمام للاتصالات   </h3>
                         </a>
                     </li>
                     <li class="nav-item d-md-none">
@@ -65,7 +65,7 @@
             <div class="navbar-container">
                 <div class="collapse navbar-collapse justify-content-end" id="navbar-mobile">
                     <ul class="nav navbar-nav">
-                         
+
                     </ul>
                 </div>
             </div>

@@ -38,6 +38,7 @@ return [
             'style' => [
                 'color' => '#fff',
                 'background' => '#d63939',
+                'z-index'=>'999999'
             ],
         ],
         'success' => [

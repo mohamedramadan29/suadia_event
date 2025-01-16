@@ -76,7 +76,8 @@
                                                                         <fieldset>
                                                                             <input type="checkbox"
                                                                                 id="input-{{ $problem->id }}"
-                                                                                name="problems[]" value="{{ $problem->name }}">
+                                                                                name="problems[]"
+                                                                                value="{{ $problem->name }}">
                                                                             <label for="input-{{ $problem->id }}">
                                                                                 {{ $problem->name }} </label>
                                                                         </fieldset>
@@ -139,6 +140,20 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <!-- عنصر التوقيع -->
+                                                <!-- باقي الحقول الأخرى -->
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>توقيع العميل</label>
+                                                        <div id="signature-pad" class="signature-pad">
+                                                            <canvas width="400" height="200"></canvas>
+                                                        </div>
+                                                        <button type="button" id="clear-signature"
+                                                            class="mt-2 btn btn-danger">مسح التوقيع</button>
+                                                        <input type="hidden" name="signature" id="signature-input">
+                                                    </div>
+                                                </div>
                                                 <div class="row">
                                                     <div class="col-lg-12">
                                                         <div class="form-check">
@@ -159,10 +174,21 @@
                                                 <button type="button" class="mr-1 btn btn-warning">
                                                     <i class="ft-x"></i> رجوع
                                                 </button>
-
                                             </div>
 
                                         </form>
+                                        <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+                                        <script>
+                                            var canvas = document.querySelector("canvas");
+                                            var signaturePad = new SignaturePad(canvas);
+
+                                            // مسح التوقيع عند الضغط على الزر
+                                            document.getElementById("clear-signature").addEventListener("click", function() {
+                                                signaturePad.clear();
+                                            });
+                                            // تخزين التوقيع في الحقل المخفي
+                                            document.getElementById("signature-input").value = signaturePad.toDataURL("image/png");
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -178,5 +204,7 @@
 @section('js')
     <script src="{{ asset('assets/admin/') }}/vendors/js/forms/icheck/icheck.min.js" type="text/javascript"></script>
     <script src="{{ asset('assets/admin/') }}/js/scripts/forms/checkbox-radio.js" type="text/javascript"></script>
+
+
 
 @endsection

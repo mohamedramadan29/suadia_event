@@ -7,6 +7,7 @@ use App\Models\dashboard\Role;
 use App\Models\dashboard\Admin;
 use App\Http\Traits\Message_Trait;
 use App\Http\Controllers\Controller;
+use App\Models\dashboard\ProblemCategory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -32,6 +33,7 @@ class AdminController extends Controller
                 'password' => 'required',
                 'password_confirmation' => 'required|same:password',
                 'role_id' => 'required',
+                'type'=>'required',
             ];
             $messages = [
                 'name.required' => 'من فضلك ادخل اسم المستخدم ',
@@ -42,6 +44,7 @@ class AdminController extends Controller
                 'password_confirmation.required' => 'من فضلك ادخل تاكيد كلمة المرور ',
                 'password_confirmation.same' => 'كلمة المرور غير متطابقة ',
                 'role_id.required' => 'من فضلك ادخل صلاحيات المستخدم ',
+                'type.required' => 'من فضلك ادخل نوع المستخدم ',
             ];
             $validator = Validator::make($data, $rules, $messages);
             if ($validator->fails()) {
@@ -53,8 +56,8 @@ class AdminController extends Controller
             $admin->phone = $data['phone'];
             $admin->password = Hash::make($data['password']);
             $admin->role_id = $data['role_id'];
-            $admin->status = 1;
-            $admin->type = 'admin';
+            $admin->status = $data['status'];
+            $admin->type = $data['type'];
             $admin->save();
             return $this->success_message('تم اضافة المستخدم بنجاح');
         }
@@ -72,6 +75,7 @@ class AdminController extends Controller
                 'email' => 'required|email',
                 'phone' => 'required',
                 'role_id' => 'required',
+                'type'=>'required',
             ];
             $messages = [
                 'name.required' => 'من فضلك ادخل اسم المستخدم ',
@@ -79,6 +83,7 @@ class AdminController extends Controller
                 'email.email' => 'من فضلك ادخل بريد الكتروني صحيح ',
                 'phone.required' => 'من فضلك ادخل رقم الهاتف ',
                 'role_id.required' => 'من فضلك ادخل صلاحيات المستخدم ',
+                'type.required' => 'من فضلك ادخل نوع المستخدم ',
             ];
 
             if (isset($data['password']) && $data['password'] != null) {
@@ -103,6 +108,8 @@ class AdminController extends Controller
             $admin->email = $data['email'];
             $admin->phone = $data['phone'];
             $admin->role_id = $data['role_id'];
+            $admin->type = $data['type'];
+            $admin->status = $data['status'];
             $admin->save();
             return $this->success_message('تم تعديل المستخدم بنجاح');
         }
@@ -110,7 +117,6 @@ class AdminController extends Controller
         $roles = Role::all();
         return view('dashboard.admins.update', compact('admin', 'roles'));
     }
-
     public function destroy($id)
     {
 
@@ -120,5 +126,25 @@ class AdminController extends Controller
         }
         $admin->delete();
         return $this->success_message('تم حذف المستخدم بنجاح');
+    }
+
+    ################### Tech Admins الفنيين #######################
+    public function tech()
+    {
+        $admins = Admin::where('type', 'فني')->get();
+        $problems = ProblemCategory::all();
+        return view('dashboard.admins.tech', compact('admins','problems'));
+    }
+
+    public function update_tech(Request $request, $id){
+        $data = $request->all();
+        $admin = Admin::find($id);
+        if(!$admin){
+            return $this->Error_message('لا يوجد مستخدم بهذا الرقم');
+        }
+        $admin->device_nums = $data['device_nums'];
+        $admin->problems = json_encode($data['problems']);
+        $admin->save();
+        return $this->success_message('تم تعديل الصلاحيات بنجاح');
     }
 }

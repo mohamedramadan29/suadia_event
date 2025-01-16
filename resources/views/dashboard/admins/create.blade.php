@@ -36,7 +36,8 @@
                                 </div>
                                 <div class="card-content collapse show">
                                     <div class="card-body">
-                                        <form class="form" method="POST" action="{{ route('dashboard.admins.create')}}" autocomplete="off">
+                                        <form class="form" method="POST" action="{{ route('dashboard.admins.create') }}"
+                                            autocomplete="off">
                                             @csrf
                                             <div class="form-body">
                                                 <div class="row">
@@ -44,21 +45,24 @@
                                                         <div class="form-group">
                                                             <label for="name"> الاسم </label>
                                                             <input required type="text" id="name"
-                                                                class="form-control" placeholder="" name="name" value="{{ old('name') }}">
+                                                                class="form-control" placeholder="" name="name"
+                                                                value="{{ old('name') }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="email"> البريد الالكتروني </label>
                                                             <input required type="email" id="email"
-                                                                class="form-control" placeholder="" name="email" value="{{ old('email') }}">
+                                                                class="form-control" placeholder="" name="email"
+                                                                value="{{ old('email') }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="phone"> رقم الهاتف </label>
                                                             <input required type="text" id="phone"
-                                                                class="form-control" placeholder="" name="phone" value="{{ old('phone') }}">
+                                                                class="form-control" placeholder="" name="phone"
+                                                                value="{{ old('phone') }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -72,19 +76,45 @@
                                                         <div class="form-group">
                                                             <label for="password_confirmation"> تاكيد كلمة المرور </label>
                                                             <input required type="password" id="password_confirmation"
-                                                                class="form-control" placeholder="" name="password_confirmation">
+                                                                class="form-control" placeholder=""
+                                                                name="password_confirmation">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="role_id"> حدد الصلاحية  </label>
-                                                            <select name="role_id" id="" class="form-control">
-                                                                <option value="" disabled selected>  -- حدد الصلاحية -- </option>
+                                                            <label for="role_id"> حدد الصلاحية </label>
+                                                            <select required name="role_id" id="" class="form-control">
+                                                                <option value="" disabled selected> -- حدد الصلاحية --
+                                                                </option>
                                                                 @foreach ($roles as $role)
-                                                                    <option {{ old('role_id') == $role->id ? 'selected' : '' }} value="{{ $role->id }}"> {{ $role->role }} </option>
+                                                                    <option
+                                                                        {{ old('role_id') == $role->id ? 'selected' : '' }}
+                                                                        value="{{ $role->id }}"> {{ $role->role }}
+                                                                    </option>
                                                                 @endforeach
                                                             </select>
-
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="type"> نوع الموظف </label>
+                                                            <select required name="type" id="" class="form-control">
+                                                                <option value="" disabled selected> -- حدد النوع  --
+                                                                </option>
+                                                                <option value="فني">فني</option>
+                                                                <option value="استقبال">استقبال</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="status"> حالة الموظف  </label>
+                                                            <select required name="status" id="" class="form-control">
+                                                                <option value="" disabled selected> -- حدد الحالة  --
+                                                                </option>
+                                                                <option value="1">فعال</option>
+                                                                <option value="0">غير فعال</option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -24,12 +24,15 @@ return new class extends Migration
             $table->string('time_delivery')->nullable();
             $table->string('status');
             $table->string('status_notes')->nullable();
+            $table->string('signature');
             $table->foreignId('admin_recieved_id')->nullable()->references('id')->on('admins')->nullOnDelete();
             $table->foreignId('admin_repair_id')->nullable()->references('id')->on('admins')->nullOnDelete();
+            $table->timestamp('checkout_time')->nullable();
+            $table->timestamp('checkout_end_time')->nullable();
+            $table->text('tech_notes')->nullable();
             $table->timestamps();
         });
     }
-
     /**
      * Reverse the migrations.
      */

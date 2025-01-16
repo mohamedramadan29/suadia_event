@@ -9,4 +9,5 @@ return [
     'add_invoice'=>'اضافة فاتورة جديدة',
     'edit_invoice'=>'تعديل الفاتورة',
     'delete_invoice'=>'حذف الفاتورة',
+    'tech_invoices'=>'الفواتير التقنية',
 ];

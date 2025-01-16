@@ -66,8 +66,8 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="password"> كلمة المرور </label>
-                                                            <input type="password" id="password"
-                                                                class="form-control" placeholder="" name="password">
+                                                            <input type="password" id="password" class="form-control"
+                                                                placeholder="" name="password">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -90,6 +90,31 @@
                                                                         value="{{ $role->id }}"> {{ $role->role }}
                                                                     </option>
                                                                 @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="type"> نوع الموظف </label>
+                                                            <select required name="type" id=""
+                                                                class="form-control">
+                                                                <option value="" disabled selected> -- حدد النوع --
+                                                                </option>
+                                                                <option {{ $admin->type == 'فني' ? 'selected' : '' }}
+                                                                    value="فني">فني</option>
+                                                                <option {{ $admin->type == 'استقبال' ? 'selected' : '' }}
+                                                                    value="استقبال">استقبال</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="status"> حالة الموظف  </label>
+                                                            <select required name="status" id="" class="form-control">
+                                                                <option value="" disabled selected> -- حدد الحالة  --
+                                                                </option>
+                                                                <option {{ $admin->status == 1 ? 'selected' : '' }} value="1">فعال</option>
+                                                                <option {{ $admin->status == 0 ? 'selected' : '' }} value="0">غير فعال</option>
                                                             </select>
                                                         </div>
                                                     </div>
