@@ -46,22 +46,25 @@
                                                         <th scope="row">{{ $loop->iteration }}</th>
                                                         <td> {{ $admin->name }} </td>
                                                         <td>
-                                                            
                                                             {{ $admin->device_nums }}
                                                         </td>
                                                         <td>
                                                             @php
-                                                                $admin_problems = json_decode($admin->problems);
+                                                                // تحويل البيانات إلى مصفوفة أو استخدام مصفوفة فارغة إذا كانت null
+                                                                $admin_problems =
+                                                                    json_decode($admin->problems, true) ?: [];
                                                             @endphp
-                                                            @if (!empty($admin_problems) && is_array($admin_problems) && count($admin_problems) > 0)
+
+                                                            @if (!empty($admin_problems))
                                                                 @foreach ($admin_problems as $admin_problem)
-                                                                    <span class="badge badge-danger"> {{ $admin_problem }}
-                                                                    </span>
+                                                                    <span
+                                                                        class="badge badge-danger">{{ $admin_problem }}</span>
                                                                 @endforeach
                                                             @else
-                                                                <span class="text-muted"> لا يوجد صلاحيات  </span>
+                                                                <span class="text-muted">لا يوجد صلاحيات</span>
                                                             @endif
                                                         </td>
+
                                                         <td>
                                                             <button type="button" class="btn btn-primary btn-sm"
                                                                 data-toggle="modal"

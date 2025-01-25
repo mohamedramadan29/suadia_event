@@ -24,17 +24,23 @@
                         <label for="title"> الاعطال المتاحة للفني </label>
                         <div class="skin skin-square">
                             <div class="col-md-12 col-sm-12 d-flex justify-content-around">
+                                @php
+                                    // تأكد من أن $admin->problems يتم تحويله إلى مصفوفة صالحة أو اجعل القيمة فارغة افتراضيًا
+                                    $admin_problems = json_decode($admin->problems, true) ?: [];
+                                @endphp
+
                                 @foreach ($problems as $problem)
                                     <fieldset>
-                                        <input
-                                            {{ in_array($problem->name, json_decode($admin->problems)) ? 'checked' : '' }}
+                                        <input {{ in_array($problem->name, $admin_problems) ? 'checked' : '' }}
                                             type="checkbox" id="input-{{ $problem->id }}" name="problems[]"
                                             value="{{ $problem->name }}">
                                         <label for="input-{{ $problem->id }}">
-                                            {{ $problem->name }} </label>
+                                            {{ $problem->name }}
+                                        </label>
                                     </fieldset>
                                 @endforeach
                             </div>
+
                         </div>
                     </div>
                     <div class="modal-footer">
