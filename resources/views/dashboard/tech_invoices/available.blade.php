@@ -43,7 +43,20 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                @php
+                                                $technicianProblems =
+                                                    json_decode(Auth::user()->problems, true) ?? [];
+                                            @endphp
                                                 @forelse ($invoices as $invoice)
+                                                    @php
+                                                        // تحويل مشاكل الفاتورة إلى مصفوفة
+                                                        $invoiceProblems = json_decode($invoice->problems, true) ?? [];
+                                                        // التحقق من أن جميع مشاكل الفاتورة ضمن اختصاصات الفني
+                                                        $allMatch = empty(
+                                                            array_diff($invoiceProblems, $technicianProblems)
+                                                        );
+                                                    @endphp
+                                                     @if ($allMatch)
                                                     <tr>
                                                         <th scope="row">{{ $loop->iteration }}</th>
                                                         <td> {{ $invoice->id }} </td>
@@ -74,6 +87,7 @@
                                                             </button>
                                                         </td>
                                                     </tr>
+                                                    @endif
                                                     @include('dashboard.tech_invoices.checkout')
                                                 @empty
                                                     <td colspan="4"> لا يوجد بيانات </td>

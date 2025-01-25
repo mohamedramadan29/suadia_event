@@ -5,10 +5,11 @@ namespace App\Http\Controllers\dashboard;
 use Illuminate\Http\Request;
 use App\Models\dashboard\Role;
 use App\Models\dashboard\Admin;
+use App\Models\dashboard\Invoice;
 use App\Http\Traits\Message_Trait;
 use App\Http\Controllers\Controller;
-use App\Models\dashboard\ProblemCategory;
 use Illuminate\Support\Facades\Hash;
+use App\Models\dashboard\ProblemCategory;
 use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
@@ -33,7 +34,7 @@ class AdminController extends Controller
                 'password' => 'required',
                 'password_confirmation' => 'required|same:password',
                 'role_id' => 'required',
-                'type'=>'required',
+                'type' => 'required',
             ];
             $messages = [
                 'name.required' => 'من فضلك ادخل اسم المستخدم ',
@@ -75,7 +76,7 @@ class AdminController extends Controller
                 'email' => 'required|email',
                 'phone' => 'required',
                 'role_id' => 'required',
-                'type'=>'required',
+                'type' => 'required',
             ];
             $messages = [
                 'name.required' => 'من فضلك ادخل اسم المستخدم ',
@@ -133,13 +134,14 @@ class AdminController extends Controller
     {
         $admins = Admin::where('type', 'فني')->get();
         $problems = ProblemCategory::all();
-        return view('dashboard.admins.tech', compact('admins','problems'));
+        return view('dashboard.admins.tech', compact('admins', 'problems'));
     }
 
-    public function update_tech(Request $request, $id){
+    public function update_tech(Request $request, $id)
+    {
         $data = $request->all();
         $admin = Admin::find($id);
-        if(!$admin){
+        if (!$admin) {
             return $this->Error_message('لا يوجد مستخدم بهذا الرقم');
         }
         $admin->device_nums = $data['device_nums'];
@@ -147,4 +149,25 @@ class AdminController extends Controller
         $admin->save();
         return $this->success_message('تم تعديل الصلاحيات بنجاح');
     }
+
+    ###################### Get The Tech Invoices #######################
+    public function tech_invoices(Request $request, $id)
+    {
+        // استخراج التاريخين من الطلب
+        $startFrom = $request->input('start_from');
+        $endTo = $request->input('end_to');
+
+        // التحقق من وجود القيم وتصفية النتائج
+        $query = Invoice::where('admin_repair_id', $id);
+
+        if ($startFrom && $endTo) {
+            $query->whereBetween('checkout_time', [$startFrom, $endTo]);
+        }
+        $invoices = $query->orderBy('id', 'desc')->paginate(10);
+        // حساب العدد الإجمالي للفواتير في الفترة المحددة
+        $totalInvoices = $query->count();
+
+        return view('dashboard.admins.tech_invoices', compact('invoices', 'id', 'totalInvoices'));
+    }
+
 }

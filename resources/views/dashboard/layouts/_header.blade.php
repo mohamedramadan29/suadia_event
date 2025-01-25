@@ -1,4 +1,3 @@
-
 <nav
     class="header-navbar navbar-expand-md navbar navbar-with-menu navbar-without-dd-arrow fixed-top navbar-semi-dark navbar-shadow">
     <div class="navbar-wrapper">
@@ -10,7 +9,7 @@
                     <a class="navbar-brand" href="{{ url('/') }}">
                         <img class="brand-logo" alt="modern admin logo"
                             src="{{ asset('assets/admin/') }}/images/logo_mobile.png">
-                        <h3 class="brand-text"> بصمة الاهتمام  </h3>
+                        <h3 class="brand-text"> بصمة الاهتمام </h3>
                     </a>
                 </li>
                 <li class="float-right nav-item d-none d-md-block"><a class="pr-0 nav-link modern-nav-toggle"
@@ -39,9 +38,8 @@
                                     alt="avatar"><i></i></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#"><i
-                                    class="ft-user"></i> تعديل البيانات   </a>
-                            <a class="dropdown-item" href="#"><i class="ft-lock"></i> تغير كلمة المرور </a>
+                            <a class="dropdown-item" href="{{ route('dashboard.update_profile') }}"><i class="ft-user"></i> تعديل البيانات </a>
+                            <a class="dropdown-item" href="{{ route('dashboard.update_password') }}"><i class="ft-lock"></i> تغير كلمة المرور </a>
                             <div class="dropdown-divider"></div>
                             <form method="POST" action="{{ route('dashboard.logout') }}">
                                 @csrf

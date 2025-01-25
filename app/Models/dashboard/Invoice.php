@@ -32,4 +32,11 @@ class Invoice extends Model
         return $this->hasMany(InvoiceSteps::class,'invoice_id');
     }
 
+    ############# Invoice Check ###############
+
+    public function checkResults()
+{
+    return $this->hasMany(InvoiceCheck::class, 'invoice_id');
+}
+
 }

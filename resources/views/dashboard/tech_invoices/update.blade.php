@@ -45,6 +45,60 @@
                                             enctype="multipart/form-data">
                                             @csrf
                                             <div class="form-body">
+                                           <!--################### Start Add ChecksResults ###################-->
+                                <div class="row">
+
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> # </th>
+                                                <th> اساسيات الفحص </th>
+                                                <th> يعمل </th>
+                                                <th> لا يعمل </th>
+                                                <th> ملاحظات </th>
+                                                <th> بعد الفحص </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($problems as $problem)
+                                                @php
+                                                    $checkResult = $invoice->checkResults
+                                                        ->where('problem_id', $problem->id)
+                                                        ->where('invoice_id', $invoice->id)
+                                                        ->first();
+                                                @endphp
+                                                <tr>
+                                                    <td> {{ $loop->iteration }}</td>
+                                                    <td>
+                                                        <input readonly disabled type="hidden" name="problem_id[]"
+                                                            value="{{ $problem->id }}">
+                                                        <input readonly type="text" value="{{ $problem->name }}"
+                                                            class="form-control" name="check_problem_name[]">
+                                                    </td>
+                                                    <td>
+                                                        <input readonly disabled type="radio" value="1" class="form-control"
+                                                            name="work_{{ $problem->id }}[]"
+                                                            {{ isset($checkResult) && $checkResult->work == 1 ? 'checked' : '' }}>
+                                                    </td>
+                                                    <td>
+                                                        <input readonly disabled type="radio" value="0" class="form-control"
+                                                            name="work_{{ $problem->id }}[]"
+                                                            {{ isset($checkResult) && $checkResult->work == 0 ? 'checked' : '' }}>
+                                                    </td>
+                                                    <td>
+                                                        <input readonly disabled type="text" value="{{ $checkResult->notes ?? '' }}"
+                                                            class="form-control" name="notes[]">
+                                                    </td>
+                                                    <td>
+                                                        <input readonly disabled type="text" value="{{ $checkResult->after_check ?? '' }}"
+                                                            class="form-control" name="after_check[]">
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!--################### End Add ChecksResults #####################-->
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
@@ -116,33 +170,49 @@
                                 </div>
                                 <div class="card-content">
                                     <div class="card-body">
+                                        <h5> اضافة مرفق </h5>
                                         <form action="{{ route('dashboard.tech_invoices.addfile', $invoice->id) }}"
                                             method="POST" enctype="multipart/form-data">
                                             @csrf
+
                                             <div class="row">
+
                                                 <div class="col-6">
                                                     <div class="form-group">
-                                                        <label for="address"> اضافة مرفق </label>
-                                                        <input type="file" name="file" class="form-control">
+                                                        <label for="address"> صورة المرفق <span class="required_span"> *
+                                                            </span> </label>
+                                                        <input required type="file" name="file" class="form-control">
                                                     </div>
                                                 </div>
-                                                <div class="col-3">
+                                                <div class="col-6">
                                                     <div class="form-group">
-                                                        <label for="address"> اضف عنوان للمرفق </label>
-                                                        <input type="text" id="title" class="form-control"
-                                                            placeholder="" name="title" value="{{ old('title') }}">
+                                                        <label for="address"> اضف عنوان للمرفق <span class="required_span">
+                                                                * </span> </label>
+                                                        <input required type="text" id="title"
+                                                            class="form-control" placeholder="" name="title"
+                                                            value="{{ old('title') }}">
                                                     </div>
                                                 </div>
-                                                <div class="col-3">
+                                                <div class="col-6">
                                                     <div class="form-group">
-                                                        <label for="address"> تفاصيل اضافية عن المرفق </label>
-                                                        <textarea name="description" id="" class="form-control">{{ old('description') }}</textarea>
+                                                        <label for="price"> سعر المرفق <span class="required_span"> *
+                                                            </span> </label>
+                                                        <input required type="number" step="0.01" id="price"
+                                                            class="form-control" placeholder="" name="price"
+                                                            value="{{ old('price') }}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-6">
+                                                    <div class="form-group">
+                                                        <label for="address"> تفاصيل اضافية عن المرفق <span
+                                                                class="required_span"> * </span> </label>
+                                                        <textarea required name="description" id="" class="form-control">{{ old('description') }}</textarea>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-actions">
                                                 <button type="submit" class="btn btn-primary btn-sm">
-                                                    <i class="la la-file"></i> اضافة المرفق
+                                                    اضافة المرفق <i class="la la-plus"></i>
                                                 </button>
                                             </div>
                                         </form>
@@ -156,6 +226,9 @@
                                                         عنوان المرفق
                                                     </th>
                                                     <th>
+                                                         السعر
+                                                    </th>
+                                                    <th>
                                                         تفاصيل اضافية
                                                     </th>
                                                     <th>
@@ -163,38 +236,43 @@
                                                     </th>
                                                 </tr>
 
-                                            @forelse ($invoice->files as $file)
-                                                <tr>
-                                                    <td>
-                                                        <a target="_blank" href="{{ asset('assets/uploads/invoices_files/'.$file['image']) }}">
-                                                        <img width="100" height="100" class="file_image"
-                                                            src="{{ asset('assets/uploads/invoices_files/' . $file['image']) }}"
-                                                            alt="Card image cap">
-                                                        </a>
-                                                    </td>
-                                                    <td>
-                                                        {{ $file->title }}
-                                                    </td>
-                                                    <td>
-                                                        {{ $file->description }}
-                                                    </td>
-                                                    <td>
-                                                        <form
-                                                            action="{{ route('dashboard.invoices.delete_file', $file['id']) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            <div class="">
-                                                                <button onclick="return confirm('هل تريد حذف هذا المرفق؟')"
-                                                                    type="submit" class="btn btn-danger btn-sm">
-                                                                    <i class="la la-trash"></i>   </button>
-                                                            </div>
-                                                        </form>
-                                                    </td>
-                                                </tr>
-                                            @empty
-                                                لا يوجد مرفقات
-                                            @endforelse
-                                        </table>
+                                                @forelse ($invoice->files as $file)
+                                                    <tr>
+                                                        <td>
+                                                            <a target="_blank"
+                                                                href="{{ asset('assets/uploads/invoices_files/' . $file['image']) }}">
+                                                                <img width="100" height="100" class="file_image"
+                                                                    src="{{ asset('assets/uploads/invoices_files/' . $file['image']) }}"
+                                                                    alt="Card image cap">
+                                                            </a>
+                                                        </td>
+                                                        <td>
+                                                            {{ $file->title }}
+                                                        </td>
+                                                        <td>
+                                                            {{ number_format($file->price,2) }} ريال
+                                                        </td>
+                                                        <td>
+                                                            {{ $file->description }}
+                                                        </td>
+                                                        <td>
+                                                            <form
+                                                                action="{{ route('dashboard.invoices.delete_file', $file['id']) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                <div class="">
+                                                                    <button
+                                                                        onclick="return confirm('هل تريد حذف هذا المرفق؟')"
+                                                                        type="submit" class="btn btn-danger btn-sm">
+                                                                        <i class="la la-trash"></i> </button>
+                                                                </div>
+                                                            </form>
+                                                        </td>
+                                                    </tr>
+                                                @empty
+                                                    لا يوجد مرفقات
+                                                @endforelse
+                                            </table>
                                         </div>
 
                                     </div>

@@ -1,5 +1,4 @@
 @extends('dashboard.layouts.app')
-
 @section('title', 'ا ضافة فاتورة جديدة ')
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/admin/') }}/vendors/css/forms/icheck/icheck.css">
@@ -35,35 +34,93 @@
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title" id="basic-layout-form"> اضافة فاتورة جديدة </h4>
-                                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
-
+                                    <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i> </a>
                                 </div>
                                 <div class="card-content collapse show">
                                     <div class="card-body">
-                                        <form class="form" method="POST"
+                                        <form class="form" method="POST" id="invoice-form"
                                             action="{{ route('dashboard.invoices.create') }}" enctype="multipart/form-data">
                                             @csrf
                                             <div class="form-body">
+                                                <!--################### Start Add ChecksResults ###################-->
+                                                <div class="row">
+                                                    <h5> فحص الجهاز </h5>
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th> # </th>
+                                                                <th> اساسيات الفحص </th>
+                                                                <th> يعمل </th>
+                                                                <th> لا يعمل </th>
+                                                                <th> ملاحظات </th>
+                                                                <th> بعد الفحص </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($problems as $problem)
+                                                                <tr>
+                                                                    <td> {{ $loop->iteration }}</td>
+                                                                    <td>
+                                                                        <input type="hidden" name="problem_id[]"
+                                                                            value="{{ $problem->id }}">
+                                                                        <input readonly type="text"
+                                                                            value="{{ $problem->name }}"
+                                                                            class="form-control"
+                                                                            name="check_problem_name[]">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="radio" value="1"
+                                                                            class="form-control"
+                                                                            name="work_{{ $problem->id }}[]"
+                                                                            {{ old('work_' . $problem->id) == '1' ? 'checked' : '' }}>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="radio" value="0"
+                                                                            class="form-control"
+                                                                            name="work_{{ $problem->id }}[]"
+                                                                            {{ old('work_' . $problem->id) == '0' ? 'checked' : '' }}>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text"
+                                                                            value="{{ old('notes.' . $loop->index) }}"
+                                                                            class="form-control" name="notes[]">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text"
+                                                                            value="{{ old('after_check.' . $loop->index) }}"
+                                                                            class="form-control" name="after_check[]">
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <!--################### End Add ChecksResults #####################-->
+
+                                                <!-- باقي الحقول -->
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="name"> اسم العميل </label>
                                                             <input required type="text" id="name"
-                                                                class="form-control" placeholder="" name="name">
+                                                                class="form-control" placeholder="" name="name"
+                                                                value="{{ old('name') }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="phone"> رقم الهاتف </label>
                                                             <input required type="text" id="phone"
-                                                                class="form-control" placeholder="" name="phone">
+                                                                class="form-control" placeholder="" name="phone"
+                                                                value="{{ old('phone') }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="title"> اسم الجهاز </label>
                                                             <input required type="text" id="title"
-                                                                class="form-control" placeholder="" name="title">
+                                                                class="form-control" placeholder="" name="title"
+                                                                value="{{ old('title') }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -78,8 +135,9 @@
                                                                                 id="input-{{ $problem->id }}"
                                                                                 name="problems[]"
                                                                                 value="{{ $problem->name }}">
-                                                                            <label for="input-{{ $problem->id }}">
-                                                                                {{ $problem->name }} </label>
+                                                                            <label
+                                                                                for="input-{{ $problem->id }}">{{ $problem->name }}
+                                                                            </label>
                                                                         </fieldset>
                                                                     @endforeach
                                                                 </div>
@@ -89,14 +147,15 @@
                                                     <div class="col-md-12">
                                                         <div class="form-group">
                                                             <label for="title"> ملاحظات </label>
-                                                            <textarea name="description" id="" class="form-control"></textarea>
+                                                            <textarea name="description" class="form-control">{{ old('description') }}</textarea>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="price"> السعر الاولي </label>
                                                             <input required type="number" step="0.01" id="price"
-                                                                class="form-control" placeholder="" name="price">
+                                                                class="form-control" placeholder="" name="price"
+                                                                value="{{ old('price') }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -105,7 +164,8 @@
                                                             <div class="form-group">
                                                                 <div class="position-relative has-icon-left">
                                                                     <input type="date" name="date_delivery"
-                                                                        id="timesheetinput3" class="form-control">
+                                                                        id="timesheetinput3" class="form-control"
+                                                                        value="{{ old('date_delivery') }}">
                                                                     <div class="form-control-position">
                                                                         <i class="ft-message-square"></i>
                                                                     </div>
@@ -114,7 +174,8 @@
                                                             <div class="form-group">
                                                                 <div class="position-relative has-icon-left">
                                                                     <input type="time" name="time_delivery"
-                                                                        id="timesheetinput6" class="form-control">
+                                                                        id="timesheetinput6" class="form-control"
+                                                                        value="{{ old('time_delivery') }}">
                                                                     <div class="form-control-position">
                                                                         <i class="ft-clock"></i>
                                                                     </div>
@@ -126,47 +187,58 @@
                                                         <div class="form-group">
                                                             <label for="price"> الحالة </label>
                                                             <select name="status" id="" class="form-control">
-                                                                <option selected value="رف الاستلام"> رف الاستلام</option>
+                                                                <option value="رف الاستلام"
+                                                                    {{ old('status') == 'رف الاستلام' ? 'selected' : '' }}>
+                                                                    رف الاستلام</option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <!-- اضافة المرفقات -->
                                                 <div class="row">
                                                     <div class="col-lg-12">
                                                         <div class="form-group">
                                                             <label for="address"> اضافة مرفقات </label>
-                                                            <input type="file" name="files[]" class="form-control"
+                                                            <input required type="file" name="files[]" class="form-control"
                                                                 multiple>
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <!-- عنصر التوقيع -->
-                                                <!-- باقي الحقول الأخرى -->
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label>توقيع العميل</label>
                                                         <div id="signature-pad" class="signature-pad">
-                                                            <canvas width="400" height="200"></canvas>
+                                                            <div class="signature-pad-body">
+                                                                <canvas></canvas>
+                                                            </div>
+                                                            <div class="signature-pad-footer">
+                                                                <button type="button" id="clear-signature"
+                                                                    class="mt-2 btn btn-danger">مسح التوقيع</button>
+                                                            </div>
                                                         </div>
-                                                        <button type="button" id="clear-signature"
-                                                            class="mt-2 btn btn-danger">مسح التوقيع</button>
-                                                        <input type="hidden" name="signature" id="signature-input">
+                                                        <input required type="hidden" name="signature" id="signature"
+                                                            value="{{ old('signature') }}">
                                                     </div>
                                                 </div>
+
+                                                <!-- الموافقة علي الشروط -->
                                                 <div class="row">
                                                     <div class="col-lg-12">
                                                         <div class="form-check">
                                                             <input required class="form-check-input" type="checkbox"
-                                                                value="" id="flexCheckDefault">
+                                                                value="1" id="flexCheckDefault"
+                                                                {{ old('flexCheckDefault') ? 'checked' : '' }}>
                                                             <label class="form-check-label" for="flexCheckDefault">
                                                                 الموافقة علي الشروط والاحكام
                                                             </label>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <div class="form-actions">
                                                 <button type="submit" class="btn btn-primary">
                                                     <i class="la la-check-square-o"></i> حفظ
@@ -175,20 +247,34 @@
                                                     <i class="ft-x"></i> رجوع
                                                 </button>
                                             </div>
-
                                         </form>
-                                        <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+
+
+                                        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+                                            integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+                                            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+                                        <!--------------- Start SignaturePad ############ -->
+                                        <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.3.4/signature_pad.min.js"
+                                            integrity="sha512-Mtr2f9aMp/TVEdDWcRlcREy9NfgsvXvApdxrm3/gK8lAMWnXrFsYaoW01B5eJhrUpBT7hmIjLeaQe0hnL7Oh1w=="
+                                            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
                                         <script>
                                             var canvas = document.querySelector("canvas");
                                             var signaturePad = new SignaturePad(canvas);
-
                                             // مسح التوقيع عند الضغط على الزر
                                             document.getElementById("clear-signature").addEventListener("click", function() {
                                                 signaturePad.clear();
                                             });
-                                            // تخزين التوقيع في الحقل المخفي
-                                            document.getElementById("signature-input").value = signaturePad.toDataURL("image/png");
+                                            document.getElementById("invoice-form").addEventListener("submit", function(e) {
+                                                var signatureInput = document.getElementById("signature");
+                                                if (signaturePad.isEmpty()) {
+                                                    e.preventDefault();
+                                                    alert("الرجاء التوقيع");
+                                                } else {
+                                                    signatureInput.value = signaturePad.toDataURL(); // تأكد من أن التوقيع يتم تخزينه هنا
+                                                }
+                                            });
                                         </script>
+
                                     </div>
                                 </div>
                             </div>
@@ -204,7 +290,5 @@
 @section('js')
     <script src="{{ asset('assets/admin/') }}/vendors/js/forms/icheck/icheck.min.js" type="text/javascript"></script>
     <script src="{{ asset('assets/admin/') }}/js/scripts/forms/checkbox-radio.js" type="text/javascript"></script>
-
-
 
 @endsection

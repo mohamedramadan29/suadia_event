@@ -71,6 +71,7 @@
                                                                 data-target="#update_tech_{{ $admin->id }}">
                                                                 تعديل الصلاحيات <i class="la la-edit"></i>
                                                             </button>
+                                                            <a href="{{ route('dashboard.admins.tech_invoices', $admin->id) }}" class="btn btn-info btn-sm"> الفواتير <i class="la la-eye"></i> </a>
                                                         </td>
                                                     </tr>
                                                     @include('dashboard.admins.update_tech')

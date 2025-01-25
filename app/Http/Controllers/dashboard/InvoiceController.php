@@ -11,11 +11,14 @@ use App\Http\Traits\Upload_Images;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Intervention\Image\Facades\Image;
+use App\Models\dashboard\InvoiceCheck;
 use App\Models\dashboard\InvoiceImage;
 use App\Models\dashboard\InvoiceSteps;
 use App\Models\dashboard\ProblemCategory;
 use Illuminate\Support\Facades\Validator;
-use Intervention\Image\Facades\Image;
+use Mpdf\Mpdf;
+use Picqer\Barcode\BarcodeGeneratorPNG;
 // use Intervention\Image\Facades\Image;
 class InvoiceController extends Controller
 {
@@ -63,6 +66,21 @@ class InvoiceController extends Controller
                 if ($validator->fails()) {
                     return redirect()->back()->withErrors($validator)->withInput();
                 }
+                // حفظ التوقيع مباشرة
+// إزالة رأس الـ Data URL
+                $base64Image = preg_replace('/^data:.+;base64,/', '', $request->signature);
+
+                // فك تشفير البيانات
+                $imageData = base64_decode($base64Image);
+
+                // إنشاء اسم الملف بشكل فريد
+                $filesiguture = 'signature_' . time() . '.png';
+
+                // مسار حفظ الصورة
+                $signuturepath = public_path('assets/uploads/invoices_files/' . $filesiguture);
+
+                // حفظ الصورة في المسار المحدد
+                file_put_contents($signuturepath, $imageData);
                 DB::beginTransaction();
                 $invoice = new Invoice();
                 $invoice->invoice_number = 1;
@@ -76,27 +94,7 @@ class InvoiceController extends Controller
                 $invoice->time_delivery = $data['time_delivery'];
                 $invoice->status = $data['status'];
                 $invoice->admin_recieved_id = Auth::id();
-                // حفظ التوقيع
-                if ($request->has('signature')) {
-                    $signatureData = $request->input('signature');
-
-                    // إزالة رأس الـ Data URL
-                    $signatureData = str_replace('data:image/png;base64,', '', $signatureData);
-                    $signatureData = base64_decode($signatureData);
-
-                    // إنشاء اسم الملف بشكل فريد
-                    $filename = 'signature_' . time() . '.png';
-
-                    // مسار حفظ الصورة
-                    $path = public_path('assets/uploads/invoices_files/' . $filename);
-
-                    // استخدام Intervention Image لحفظ الصورة
-                    //    $image = Image::make($signatureData);
-                    // $image = Image::make($signatureData);
-                    // $image->save($path);
-                }
-
-                $invoice->signature = 'assets/uploads/invoices_files/' . $filename;
+                $invoice->signature =  $filesiguture;
                 $invoice->save();
                 ############ Start Insert Files ################
                 if ($request->hasFile('files')) {
@@ -116,6 +114,20 @@ class InvoiceController extends Controller
                 $invoice_step->admin_id = Auth::id();
                 $invoice_step->step_details = ' تم اضافة الفاتورة  ';
                 $invoice_step->save();
+
+                // إضافة نتائج الفحص
+                if (isset($data['problem_id']) && is_array($data['problem_id'])) {
+                    foreach ($data['problem_id'] as $index => $problemId) {
+                        $check = new InvoiceCheck();
+                        $check->invoice_id = $invoice->id;
+                        $check->problem_id = $problemId;
+                        $check->problem_name = $data['check_problem_name'][$index] ?? '';
+                        $check->work = isset($data['work_' . $problemId][0]) ? $data['work_' . $problemId][0] : 0;
+                        $check->notes = $data['notes'][$index] ?? null;
+                        $check->after_check = $data['after_check'][$index] ?? null;
+                        $check->save();
+                    }
+                }
                 DB::commit();
                 return $this->success_message(' تم اضافة الفاتورة بنجاح');
             }
@@ -188,6 +200,23 @@ class InvoiceController extends Controller
                 $invoice_step->admin_id = Auth::id();
                 $invoice_step->step_details = ' تم تعديل الفاتورة  ';
                 $invoice_step->save();
+                // إضافة الفحوصات أو تعديلها
+                if (isset($data['problem_id']) && is_array($data['problem_id'])) {
+                    foreach ($data['problem_id'] as $index => $problem_id) {
+                        $checkResult = InvoiceCheck::updateOrCreate(
+                            [
+                                'invoice_id' => $invoice->id,
+                                'problem_id' => $problem_id,
+                            ],
+                            [
+                                'work' => $data['work_' . $problem_id][0] ?? null,
+                                'notes' => $data['notes'][$index] ?? '',
+                                'after_check' => $data['after_check'][$index] ?? '',
+                            ]
+                        );
+                    }
+                }
+
                 DB::commit();
                 return $this->success_message(' تم تعديل الفاتورة بنجاح');
             }
@@ -258,4 +287,40 @@ class InvoiceController extends Controller
         return $this->success_message('تم تعين فني من جانب المدير  بنجاح');
 
     }
+
+    ################# Start Print BarCode ################
+
+
+    public function print_barcode($id)
+    {
+        try {
+            $invoice = Invoice::findOrFail($id);
+
+            // توليد الباركود باستخدام مكتبة Picqer
+            $generator = new BarcodeGeneratorPNG();
+            $barcode = $generator->getBarcode((string) $invoice->id, $generator::TYPE_CODE_128);
+            // إعدادات حجم الورقة بناءً على المحتوى
+            $mpdf = new Mpdf([
+                'mode' => 'utf-8',
+                'default_font' => 'Cairo',
+                'format' => [80, 70], // عرض وطول الورقة (80 مم × 150 مم)، يمكن تغييره حسب البيانات
+                'margin_left' => 5,
+                'margin_right' => 5,
+                'margin_top' => 5,
+                'margin_bottom' => 5,
+            ]);
+
+            // إرسال البيانات إلى ملف العرض (View)
+            $html = view('dashboard.invoices.barcode_pdf', compact('invoice', 'barcode'))->render();
+
+            // كتابة الـ HTML في PDF
+            $mpdf->WriteHTML($html);
+
+            // عرض الـ PDF مباشرة أو تحميله
+            return $mpdf->Output("Invoice_{$invoice->id}.pdf", 'I');
+        } catch (Exception $e) {
+            return back()->withErrors('حدث خطأ أثناء الطباعة: ' . $e->getMessage());
+        }
+    }
+    ################### End Print BarCode ################
 }

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('user_upload')->nullable()->references('id')->on('admins')->nullOnDelete();
             $table->string('title')->nullable();
             $table->text('description')->nullable();
+            $table->double('price')->default(0);
             $table->timestamps();
         });
     }

@@ -102,7 +102,25 @@
                       </ul>
                   </li>
               @endcan
- 
+
+              <li class="nav-item {{ Route::is('dashboard.tech_invoices.*') ? 'active' : '' }}"><a href="#"><i
+                          class="la la-user"></i><span class="menu-title" data-i18n="nav.users.main"> ادارة
+                          حسابي
+                      </span></a>
+                  <ul class="menu-content">
+                      <li class="{{ Route::is('dashboard.update_profile') ? 'active' : '' }}">
+                          <a class="menu-item" href="{{ route('dashboard.update_profile') }}"
+                              data-i18n="nav.users.user_profile"> تعديل البيانات
+                          </a>
+                      </li>
+                      <li class="{{ Route::is('dashboard.update_password') ? 'active' : '' }}">
+                          <a class="menu-item" href="{{ route('dashboard.update_password') }}"
+                              data-i18n="nav.users.user_profile">  تعديل كلمة المرور
+                          </a>
+                      </li>
+                  </ul>
+              </li>
+
           </ul>
       </div>
   </div>

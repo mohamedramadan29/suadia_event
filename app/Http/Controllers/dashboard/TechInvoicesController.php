@@ -111,6 +111,7 @@ class TechInvoicesController extends Controller
             $file->user_upload = Auth::id();
             $file->title = $request->title;
             $file->description = $request->description;
+            $file->price = $request->price;
             $file->save();
             return $this->success_message(' تم اضافة المرفق بنجاح  ');
         } catch (Exception $e) {

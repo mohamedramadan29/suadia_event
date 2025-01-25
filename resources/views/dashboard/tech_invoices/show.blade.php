@@ -1,6 +1,6 @@
 @extends('dashboard.layouts.app')
 
-@section('title', ' تفاصيل الفاتورة  ')
+@section('title', ' تفاصيل الفاتورة ')
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/admin/') }}/vendors/css/forms/icheck/icheck.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/admin/') }}/vendors/css/forms/icheck/custom.css">
@@ -11,15 +11,16 @@
         <div class="content-wrapper">
             <div class="content-header row">
                 <div class="mb-2 content-header-left col-md-6 col-12 breadcrumb-new">
-                    <h3 class="mb-0 content-header-title d-inline-block"> تفاصيل الفاتورة  </h3>
+                    <h3 class="mb-0 content-header-title d-inline-block"> تفاصيل الفاتورة </h3>
                     <div class="row breadcrumbs-top d-inline-block">
                         <div class="breadcrumb-wrapper col-12">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="{{ route('dashboard.welcome') }}">الرئيسية </a>
                                 </li>
-                                <li class="breadcrumb-item"><a href="{{ route('dashboard.tech_invoices.available') }}"> الفواتير المتاحة  </a>
+                                <li class="breadcrumb-item"><a href="{{ route('dashboard.tech_invoices.available') }}">
+                                        الفواتير المتاحة </a>
                                 </li>
-                                <li class="breadcrumb-item active"><a href="#">  تفاصيل الفاتورة  </a>
+                                <li class="breadcrumb-item active"><a href="#"> تفاصيل الفاتورة </a>
                                 </li>
                             </ol>
                         </div>
@@ -34,14 +35,68 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title" id="basic-layout-form">  تفاصيل الفاتورة  </h4>
+                                    <h4 class="card-title" id="basic-layout-form"> تفاصيل الفاتورة </h4>
+
+                                    <h4 class="card-title" id="basic-layout-form">  -- نتائج فحص الجهاز  -- </h4>
                                     <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
                                 </div>
+                                <!--################### Start Add ChecksResults ###################-->
+                                <div class="row">
+
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th> # </th>
+                                                <th> اساسيات الفحص </th>
+                                                <th> يعمل </th>
+                                                <th> لا يعمل </th>
+                                                <th> ملاحظات </th>
+                                                <th> بعد الفحص </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($problems as $problem)
+                                                @php
+                                                    $checkResult = $invoice->checkResults
+                                                        ->where('problem_id', $problem->id)
+                                                        ->where('invoice_id', $invoice->id)
+                                                        ->first();
+                                                @endphp
+                                                <tr>
+                                                    <td> {{ $loop->iteration }}</td>
+                                                    <td>
+                                                        <input readonly disabled type="hidden" name="problem_id[]"
+                                                            value="{{ $problem->id }}">
+                                                        <input readonly type="text" value="{{ $problem->name }}"
+                                                            class="form-control" name="check_problem_name[]">
+                                                    </td>
+                                                    <td>
+                                                        <input readonly disabled type="radio" value="1" class="form-control"
+                                                            name="work_{{ $problem->id }}[]"
+                                                            {{ isset($checkResult) && $checkResult->work == 1 ? 'checked' : '' }}>
+                                                    </td>
+                                                    <td>
+                                                        <input readonly disabled type="radio" value="0" class="form-control"
+                                                            name="work_{{ $problem->id }}[]"
+                                                            {{ isset($checkResult) && $checkResult->work == 0 ? 'checked' : '' }}>
+                                                    </td>
+                                                    <td>
+                                                        <input readonly disabled type="text" value="{{ $checkResult->notes ?? '' }}"
+                                                            class="form-control" name="notes[]">
+                                                    </td>
+                                                    <td>
+                                                        <input readonly disabled type="text" value="{{ $checkResult->after_check ?? '' }}"
+                                                            class="form-control" name="after_check[]">
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!--################### End Add ChecksResults #####################-->
                                 <div class="card-content collapse show">
                                     <div class="card-body">
-                                        <form class="form" method="POST"
-                                            action="#"
-                                            enctype="multipart/form-data">
+                                        <form class="form" method="POST" action="#" enctype="multipart/form-data">
                                             @csrf
                                             <div class="form-body">
                                                 <div class="row">
@@ -100,9 +155,9 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="price"> السعر الاولي </label>
-                                                            <input disabled required type="number" step="0.01" id="price"
-                                                                class="form-control" placeholder="" name="price"
-                                                                value="{{ $invoice->price }}">
+                                                            <input disabled required type="number" step="0.01"
+                                                                id="price" class="form-control" placeholder=""
+                                                                name="price" value="{{ $invoice->price }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
@@ -146,7 +201,9 @@
                                             @forelse ($invoice->files as $file)
                                                 <div class="col-md-3">
                                                     <div class="card">
-                                                        <form action="{{ route('dashboard.invoices.delete_file', $file['id']) }}" method="POST">
+                                                        <form
+                                                            action="{{ route('dashboard.invoices.delete_file', $file['id']) }}"
+                                                            method="POST">
                                                             @csrf
                                                             <div class="filess">
                                                                 <img class="file_image"
@@ -161,20 +218,22 @@
                                             @endforelse
                                         </div>
                                         <style>
-                                            .filess{
+                                            .filess {
                                                 display: flex;
                                                 flex-direction: column;
                                                 justify-content: center;
                                                 align-items: center;
                                             }
-                                            .file_image{
+
+                                            .file_image {
                                                 width: 150px;
                                                 height: 150px;
                                                 border: 2px #f1f1f1 solid;
                                                 border-radius: 10px;
                                                 padding: 2px;
                                             }
-                                            .filess button{
+
+                                            .filess button {
                                                 margin-top: 10px;
                                             }
                                         </style>

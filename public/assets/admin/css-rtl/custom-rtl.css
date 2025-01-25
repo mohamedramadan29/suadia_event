@@ -98,3 +98,8 @@ code[class*='language-'], pre[class*='language-'] {
 .jp-card .jp-card-front .jp-card-lower .jp-card-expiry {
   right : 65%;
 }
+
+
+.required_span{
+    color:red;
+}

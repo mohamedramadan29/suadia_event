@@ -39,6 +39,10 @@ Route::group([
 
     ############################### Start Admin Auth Route  ###############
     Route::group(['middleware' => 'auth:admin'], function () {
+        Route::controller(AuthController::class)->group(function () {
+            Route::match(['post','get'],'update_profile', 'update_profile')->name('update_profile');
+            Route::match(['post','get'],'update_password', 'update_password')->name('update_password');
+        });
 
         ############################### Start Welcome  Controller ###############
 
@@ -70,6 +74,8 @@ Route::group([
                 Route::match(['get', 'post'], 'create', 'create')->name('create');
                 Route::match(['post', 'get'], 'update/{id}', 'update')->name('update');
                 Route::post('destroy/{id}', 'destroy')->name('destroy');
+                ######################### Show Tech Invoices  Admins ############################
+                Route::match(['post', 'get'], 'tech_invoices/{id}', 'tech_invoices')->name('tech_invoices');
             });
         });
         ################### End Admins Routes ###########################
@@ -92,6 +98,7 @@ Route::group([
                 Route::post('destroy/{id}', 'destroy')->name('destroy');
                 Route::post('delete_file/{id}', 'delete_file')->name('delete_file');
                 Route::get('print/{id}', 'print')->name('print');
+                Route::get('print_barcode/{id}', 'print_barcode')->name('print_barcode');
                 Route::get('steps/{id}', 'steps')->name('steps');
                 Route::post('add_tech/{id}', 'add_tech')->name('add_tech');
             });

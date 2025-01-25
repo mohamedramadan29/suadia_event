@@ -44,6 +44,66 @@
                                             enctype="multipart/form-data">
                                             @csrf
                                             <div class="form-body">
+                                                <!--################### Start Add ChecksResults ###################-->
+                                                <div class="row">
+                                                    <h5> فحص الجهاز </h5>
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th> # </th>
+                                                                <th> اساسيات الفحص </th>
+                                                                <th> يعمل </th>
+                                                                <th> لا يعمل </th>
+                                                                <th> ملاحظات </th>
+                                                                <th> بعد الفحص </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($problems as $problem)
+                                                                @php
+                                                                    $checkResult = $invoice->checkResults
+                                                                        ->where('problem_id', $problem->id)
+                                                                        ->where('invoice_id', $invoice->id)
+                                                                        ->first();
+                                                                @endphp
+                                                                <tr>
+                                                                    <td> {{ $loop->iteration }}</td>
+                                                                    <td>
+                                                                        <input type="hidden" name="problem_id[]"
+                                                                            value="{{ $problem->id }}">
+                                                                        <input readonly type="text"
+                                                                            value="{{ $problem->name }}"
+                                                                            class="form-control"
+                                                                            name="check_problem_name[]">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="radio" value="1"
+                                                                            class="form-control"
+                                                                            name="work_{{ $problem->id }}[]"
+                                                                            {{ isset($checkResult) && $checkResult->work == 1 ? 'checked' : '' }}>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="radio" value="0"
+                                                                            class="form-control"
+                                                                            name="work_{{ $problem->id }}[]"
+                                                                            {{ isset($checkResult) && $checkResult->work == 0 ? 'checked' : '' }}>
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text"
+                                                                            value="{{ $checkResult->notes ?? '' }}"
+                                                                            class="form-control" name="notes[]">
+                                                                    </td>
+                                                                    <td>
+                                                                        <input type="text"
+                                                                            value="{{ $checkResult->after_check ?? '' }}"
+                                                                            class="form-control" name="after_check[]">
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <!--################### End Add ChecksResults #####################-->
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
@@ -138,7 +198,8 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <img width="100" height="100" src="{{ asset($invoice->signature) }}" alt="">
+                                                    <img width="100" height="100"
+                                                        src="{{ asset('assets/uploads/invoices_files/'.$invoice->signature) }}" alt="">
 
                                                 </div>
                                                 <div class="row">
@@ -184,13 +245,16 @@
                                             @forelse ($invoice->files as $file)
                                                 <div class="col-md-3">
                                                     <div class="card">
-                                                        <form action="{{ route('dashboard.invoices.delete_file', $file['id']) }}" method="POST">
+                                                        <form
+                                                            action="{{ route('dashboard.invoices.delete_file', $file['id']) }}"
+                                                            method="POST">
                                                             @csrf
                                                             <div class="filess">
                                                                 <img class="file_image"
                                                                     src="{{ asset('assets/uploads/invoices_files/' . $file['image']) }}"
                                                                     alt="Card image cap">
-                                                                <button onclick="return confirm('هل تريد حذف هذا المرفق؟')" type="submit" class="btn btn-danger btn-sm">
+                                                                <button onclick="return confirm('هل تريد حذف هذا المرفق؟')"
+                                                                    type="submit" class="btn btn-danger btn-sm">
                                                                     <i class="la la-trash"></i> حذف </button>
                                                             </div>
                                                         </form>
@@ -201,20 +265,22 @@
                                             @endforelse
                                         </div>
                                         <style>
-                                            .filess{
+                                            .filess {
                                                 display: flex;
                                                 flex-direction: column;
                                                 justify-content: center;
                                                 align-items: center;
                                             }
-                                            .file_image{
+
+                                            .file_image {
                                                 width: 150px;
                                                 height: 150px;
                                                 border: 2px #f1f1f1 solid;
                                                 border-radius: 10px;
                                                 padding: 2px;
                                             }
-                                            .filess button{
+
+                                            .filess button {
                                                 margin-top: 10px;
                                             }
                                         </style>

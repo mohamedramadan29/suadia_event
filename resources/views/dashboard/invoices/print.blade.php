@@ -21,23 +21,15 @@
                 </div>
             </div>
             <div class="content-body">
-                <input type="hidden"  value="{{ $invoice->name }}" id="customername">
+                <input type="hidden" value="{{ $invoice->name }}" id="customername">
                 <section class="card">
                     <div id="invoice-template" class="card-body">
                         <!-- Invoice Company Details -->
                         <div id="invoice-company-details d-flex" class="row">
                             <div class="text-left col-md-6 col-sm-6">
                                 <div class="media">
-                                    <img src="{{ asset('assets/admin/') }}/images/logo/logo-80x80.png" alt="company logo"
-                                        class="" />
-                                    <div class="media-body">
-                                        <ul class="px-0 ml-2 list-unstyled">
-                                            <li class="text-bold-800"> اسم المؤسسـة </li>
-                                            <li> الرياض </li>
-                                            <li>الحي التاسع ,</li>
-                                            <li>السعودية</li>
-                                        </ul>
-                                    </div>
+                                    <img width="200px" src="{{ asset('assets/admin/') }}/images/logo.png"
+                                        alt="company logo" class="" />
                                 </div>
                             </div>
                             <div class="text-right col-md-6 col-sm-6">
@@ -92,8 +84,8 @@
                                                 </td>
                                                 <td class="text-right">
                                                     @foreach (json_decode($invoice->problems) as $problem)
-                                                        <span class="badge badge-danger"> {{ $problem }}
-                                                        </span>
+                                                        <span class=""> {{ $problem }}
+                                                        </span> -
                                                     @endforeach
                                                 </td>
                                                 <td class="text-right">{{ $invoice->description }}</td>
@@ -131,22 +123,37 @@
                                             <tbody>
                                                 <tr>
                                                     <td> السعر الاولي </td>
-                                                    <td class="text-right"> {{ $invoice->price }} ريال </td>
+                                                    <td class="text-right"> {{ number_format($invoice->price, 2) }} ريال
+                                                    </td>
                                                 </tr>
-                                                <tr>
-                                                    <td> قطع الغيار </td>
-                                                    <td class="text-right"> {{ $invoice->price }} ريال </td>
-                                                </tr>
+                                                @php
+                                                    $sub_total = 0;
+                                                @endphp
+                                                @if ($invoice->files->count() > 0)
+                                                    @foreach ($invoice->files as $file)
+                                                        @php
+                                                            $sub_total += $file->price;
+                                                        @endphp
+                                                        <tr>
+                                                            <td> {{ $file->title }} </td>
+                                                            <td class="text-right"> {{ number_format($file->price, 2) }}
+                                                                ريال
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                @endif
+
+                                                @php
+                                                    $total_price = $invoice->price + $sub_total;
+                                                @endphp
                                                 <tr>
                                                     <td class="text-bold-800">المجموع الكلي </td>
-                                                    <td class="text-right text-bold-800"> 16,688.00 ريال </td>
+                                                    <td class="text-right text-bold-800">
+                                                        {{ number_format($total_price, 2) }} ريال </td>
                                                 </tr>
-
-
                                             </tbody>
                                         </table>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -158,8 +165,9 @@
                                     <p> يجب إحضار الفاتورة عند استلام الجهاز. </p>
                                 </div>
                                 <div class="text-center col-md-5 col-sm-12">
-                                    <button  onclick="setPrintTitle(); window.print();" type="button" class="my-1 btn btn-info btn-lg print_button"><i
-                                            class="la la-paper-plane-o"></i> طباعة </button>
+                                    <button onclick="setPrintTitle(); window.print();" type="button"
+                                        class="my-1 btn btn-info btn-lg print_button"><i class="la la-paper-plane-o"></i>
+                                        طباعة </button>
                                 </div>
                             </div>
                         </div>
@@ -174,12 +182,13 @@
 
 <style>
     @media print {
-        footer{
+        footer {
             display: none;
         }
+
         .header-navbar .navbar-wrapper,
         body.vertical-layout.vertical-menu.menu-expanded .main-menu,
-        .content-wrapper .content-header{
+        .content-wrapper .content-header {
             display: none;
             width: 0
         }
@@ -187,13 +196,14 @@
         body.vertical-layout.vertical-menu.menu-expanded .content {
             margin-right: 0 !important;
         }
+
         @page {
             margin: 0;
             padding: 0;
             background-color: #fff
         }
 
-        html body .content .content-wrapper{
+        html body .content .content-wrapper {
             background-color: #fff;
         }
 

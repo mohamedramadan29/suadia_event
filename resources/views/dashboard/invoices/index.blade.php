@@ -42,6 +42,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
+                                                    <th> رقم الفاتورة </th>
                                                     <th> الاسم </th>
                                                     <th> رقم الهاتف </th>
                                                     <th> العنوان </th>
@@ -56,6 +57,7 @@
                                                 @forelse ($invoices as $invoice)
                                                     <tr>
                                                         <th scope="row">{{ $loop->iteration }}</th>
+                                                        <td> {{ $invoice->id }} </td>
                                                         <td> {{ $invoice->name }} </td>
                                                         <td>
                                                             {{ $invoice->phone }}
@@ -118,6 +120,9 @@
                                                                         class="dropdown-item" type="button"> تعديل </a>
                                                                     <a href="{{ route('dashboard.invoices.print', $invoice->id) }}"
                                                                         class="dropdown-item" type="button"> طباعة </a>
+                                                                    <a href="{{ route('dashboard.invoices.print_barcode', $invoice->id) }}"
+                                                                        class="dropdown-item" type="button"> طباعة باركود
+                                                                    </a>
                                                                     <a href="{{ route('dashboard.invoices.steps', $invoice->id) }}"
                                                                         class="dropdown-item" type="button"> حركة حساب
                                                                         الفاتورة </a>
