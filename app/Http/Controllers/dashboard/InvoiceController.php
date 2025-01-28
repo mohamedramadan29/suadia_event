@@ -17,6 +17,7 @@ use App\Models\dashboard\InvoiceImage;
 use App\Models\dashboard\InvoiceSteps;
 use App\Models\dashboard\ProblemCategory;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Http;
 use Mpdf\Mpdf;
 use Picqer\Barcode\BarcodeGeneratorPNG;
 // use Intervention\Image\Facades\Image;
@@ -94,7 +95,7 @@ class InvoiceController extends Controller
                 $invoice->time_delivery = $data['time_delivery'];
                 $invoice->status = $data['status'];
                 $invoice->admin_recieved_id = Auth::id();
-                $invoice->signature =  $filesiguture;
+                $invoice->signature = $filesiguture;
                 $invoice->save();
                 ############ Start Insert Files ################
                 if ($request->hasFile('files')) {
@@ -128,6 +129,26 @@ class InvoiceController extends Controller
                         $check->save();
                     }
                 }
+                ########### Send Message To WhatsApp
+
+                // إرسال الرسالة عبر Rich API
+                $postData = [
+                    "contact" => [
+                        [
+                            "number" => $invoice->phone,
+                            "message" => "شكراً لك على حجز الفاتورة. رقم الفاتورة: {$invoice->invoice_number}."
+                        ]
+                    ]
+                ];
+                $response = Http::withHeaders([
+                    'Api-key' => '10e9848d-a782-4201-8af0-f4beca0e2abe',
+                    'Content-Type' => 'application/json',
+                ])->post('https://app.reach-sa.com/api/whatsapp/send', $postData);
+
+                if ($response->failed()) {
+                    throw new \Exception("فشل إرسال الرسالة: " . $response->body());
+                }
+
                 DB::commit();
                 return $this->success_message(' تم اضافة الفاتورة بنجاح');
             }
