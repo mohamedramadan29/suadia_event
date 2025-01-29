@@ -1,5 +1,5 @@
-@extends('admin.layouts.auth')
-@section('title', 'Email')
+@extends('dashboard.layouts.auth')
+@section('title', 'نسيت كلمة المرور')
 @section('content')
     <div class="app-content content">
         <div class="content-wrapper">
@@ -12,11 +12,11 @@
                             <div class="px-2 py-2 m-0 card border-grey border-lighten-3">
                                 <div class="pb-0 border-0 card-header">
                                     <div class="text-center card-title">
-                                        <img src="{{ asset('assets/admin/') }}/images/logo/logo-dark.png"
-                                            alt="branding logo">
+                                        <img style="width: 150px" src="{{ asset('assets/admin/') }}/images/logo.png"
+                                        alt=" بصمة الاهتمام للاتصالات  ">
                                     </div>
                                     <h6 class="pt-2 text-center card-subtitle line-on-side text-muted font-small-3">
-                                        <span>We will send you a link to reset password.</span>
+                                        <span> نسيت كلمة المرور </span>
                                     </h6>
                                 </div>
                                 @foreach ($errors as $error)
@@ -25,7 +25,7 @@
                                 <div class="card-content">
                                     <div class="card-body">
                                         <form method="POST" class="form-horizontal"
-                                            action="{{ route('dashboard.password.email.post') }}">
+                                            action="{{ route('dashboard.forget_password') }}">
                                             @csrf
                                             <fieldset class="form-group position-relative has-icon-left">
                                                 <input type="email" class="form-control form-control-lg input-lg"

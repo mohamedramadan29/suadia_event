@@ -23,6 +23,9 @@ class AuthController extends Controller
 
     public function show_login()
     {
+        if(Auth::guard('admin')->check()){
+            return redirect()->route('dashboard.welcome');
+        }
         return view("dashboard.auth.login");
     }
     public function register_login(Request $request)

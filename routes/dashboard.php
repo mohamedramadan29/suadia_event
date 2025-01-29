@@ -30,6 +30,9 @@ Route::group([
         Route::post('password/email', 'sendotp')->name('password.email.post');
         Route::get('password/verify/{email}', 'showotpform')->name('password.otp.show');
         Route::get('password/verify', 'otpverify')->name('password.otp.post');
+        Route::match(['post', 'get'], 'forget-password', 'forget_password')->name('forget_password');
+        Route::match(['post', 'get'], 'change-forget-password/{code}', 'change_forget_password');
+        Route::post('user/update_forget_password', 'update_forget_password')->name('update_forget_password');
     });
     Route::controller(ResetPasswordController::class)->group(function () {
         Route::get('password/reset/{email}', 'ShowResetForm')->name('password.reset');
@@ -47,7 +50,6 @@ Route::group([
         ############################### Start Welcome  Controller ###############
 
         Route::controller(WelcomeController::class)->group(function () {
-
             Route::get('welcome', 'index')->name('welcome');
         });
 
@@ -120,8 +122,3 @@ Route::group([
 
 
 });
-
-
-Route::get('/', function () {
-    return view('welcome');
-})->name('login');
