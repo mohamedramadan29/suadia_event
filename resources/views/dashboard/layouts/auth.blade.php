@@ -5,11 +5,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <meta name="description"
-        content="Modern admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities with bitcoin dashboard.">
-    <meta name="keywords"
-        content="admin template, modern admin template, dashboard template, flat admin template, responsive admin template, web app, crypto dashboard, bitcoin dashboard">
-    <meta name="author" content="PIXINVENT">
+    <meta name="description" content=" بصمة الاهتمام للاتصالات  ">
+    <meta name="keywords" content=" بصمة الاهتمام للاتصالات ">
+    <meta name="author" content="Mohamed Ramadan +201011642731">
     <title> الرئيسية | @yield('title')
     </title>
     <link rel="apple-touch-icon" href="{{ asset('assets/admin') }}/images/ico/apple-icon-120.png">
@@ -53,7 +51,7 @@
                         <a class="navbar-brand" href="#">
                             <img class="brand-logo" alt="modern admin logo"
                                 src="{{ asset('assets/admin/') }}/images/logo_mobile.png">
-                            <h3 class="brand-text"> بصمة الاهتمام للاتصالات   </h3>
+                            <h3 class="brand-text"> بصمة الاهتمام للاتصالات </h3>
                         </a>
                     </li>
                     <li class="nav-item d-md-none">

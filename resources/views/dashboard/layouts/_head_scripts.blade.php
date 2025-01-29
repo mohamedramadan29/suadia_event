@@ -9,7 +9,7 @@
         content=" بصمة الاهتمام للاتصالات  ">
     <meta name="keywords"
         content=" بصمة الاهتمام للاتصالات ">
-    <meta name="author" content="PIXINVENT">
+    <meta name="author" content="Mohamed Ramadan +201011642731">
     <title> @yield('title')
     </title>
     <link rel="apple-touch-icon" href="{{ asset('assets/admin/') }}/images/logo_mobile.png">

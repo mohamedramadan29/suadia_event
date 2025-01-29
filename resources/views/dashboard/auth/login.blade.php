@@ -9,7 +9,7 @@
             <div class="content-body">
                 <section class="flexbox-container">
                     <div class="col-12 d-flex align-items-center justify-content-center">
-                        <div class="p-0 col-md-4 col-10 box-shadow-2">
+                        <div class="p-0 col-md-4 col-12 box-shadow-2">
                             <div class="m-0 card border-grey border-lighten-3">
                                 <div class="border-0 card-header">
                                     <div class="text-center card-title">
