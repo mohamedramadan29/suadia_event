@@ -62,6 +62,19 @@
 
                       </ul>
                   </li>
+                  <li class="nav-item {{ Route::is('dashboard.check_text.*') ? 'active' : '' }}"><a href="#"><i
+                              class="la la-puzzle-piece"></i><span class="menu-title" data-i18n="nav.users.main"> ادارة
+                              اساسيات الفحص
+                          </span></a>
+                      <ul class="menu-content">
+                          <li class="{{ Route::is('dashboard.check_text.index') ? 'active' : '' }}">
+                              <a class="menu-item" href="{{ route('dashboard.check_text.index') }}"
+                                  data-i18n="nav.users.user_profile"> اساسيات الفحص
+                              </a>
+                          </li>
+
+                      </ul>
+                  </li>
               @endcan
 
               @can('invoices')
@@ -89,7 +102,7 @@
                               فواتيري
                           </span></a>
                       <ul class="menu-content">
-                          <li class="{{ Route::is('da.tech_invoices.index') ? 'active' : '' }}">
+                          <li class="{{ Route::is('dashboard.tech_invoices.index') ? 'active' : '' }}">
                               <a class="menu-item" href="{{ route('dashboard.tech_invoices.index') }}"
                                   data-i18n="nav.users.user_profile"> فواتيري
                               </a>
@@ -103,7 +116,7 @@
                   </li>
               @endcan
 
-              <li class="nav-item {{ Route::is('dashboard.tech_invoices.*') ? 'active' : '' }}"><a href="#"><i
+              <li class="nav-item {{ Route::is('dashboard.update_profile.*') ? 'active' : '' }}"><a href="#"><i
                           class="la la-user"></i><span class="menu-title" data-i18n="nav.users.main"> ادارة
                           حسابي
                       </span></a>
@@ -115,7 +128,7 @@
                       </li>
                       <li class="{{ Route::is('dashboard.update_password') ? 'active' : '' }}">
                           <a class="menu-item" href="{{ route('dashboard.update_password') }}"
-                              data-i18n="nav.users.user_profile">  تعديل كلمة المرور
+                              data-i18n="nav.users.user_profile"> تعديل كلمة المرور
                           </a>
                       </li>
                   </ul>

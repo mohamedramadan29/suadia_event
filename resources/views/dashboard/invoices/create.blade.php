@@ -44,7 +44,7 @@
                                             <div class="form-body">
                                                 <!--################### Start Add ChecksResults ###################-->
                                                 <div class="row">
-                                                    <h5> فحص الجهاز </h5>
+                                                    <h5> فحص الجهاز <span class="required_span"> * </span> </h5>
                                                     <table class="table">
                                                         <thead>
                                                             <tr>
@@ -57,28 +57,28 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach ($problems as $problem)
+                                                            @foreach ($checks as $check)
                                                                 <tr>
                                                                     <td> {{ $loop->iteration }}</td>
                                                                     <td>
                                                                         <input type="hidden" name="problem_id[]"
-                                                                            value="{{ $problem->id }}">
+                                                                            value="{{ $check->id }}">
                                                                         <input readonly type="text"
-                                                                            value="{{ $problem->name }}"
+                                                                            value="{{ $check->name }}"
                                                                             class="form-control"
                                                                             name="check_problem_name[]">
                                                                     </td>
                                                                     <td>
-                                                                        <input type="radio" value="1"
+                                                                        <input required type="radio" value="1"
                                                                             class="form-control"
-                                                                            name="work_{{ $problem->id }}[]"
-                                                                            {{ old('work_' . $problem->id) == '1' ? 'checked' : '' }}>
+                                                                            name="work_{{ $check->id }}[]"
+                                                                            {{ old('work_' . $check->id) == '1' ? 'checked' : '' }}>
                                                                     </td>
                                                                     <td>
-                                                                        <input type="radio" value="0"
+                                                                        <input required type="radio" value="0"
                                                                             class="form-control"
-                                                                            name="work_{{ $problem->id }}[]"
-                                                                            {{ old('work_' . $problem->id) == '0' ? 'checked' : '' }}>
+                                                                            name="work_{{ $check->id }}[]"
+                                                                            {{ old('work_' . $check->id) == '0' ? 'checked' : '' }}>
                                                                     </td>
                                                                     <td>
                                                                         <input type="text"
@@ -101,7 +101,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="name"> اسم العميل </label>
+                                                            <label for="name"> اسم العميل <span class="required_span"> *  </span> </label>
                                                             <input required type="text" id="name"
                                                                 class="form-control" placeholder="" name="name"
                                                                 value="{{ old('name') }}">
@@ -109,15 +109,15 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="phone"> رقم الهاتف </label>
-                                                            <input required type="text" id="phone"
+                                                            <label for="phone"> رقم الهاتف <span class="required_span"> *  </span>  </label>
+                                                            <input required type="number" id="phone"
                                                                 class="form-control" placeholder="" name="phone"
                                                                 value="{{ old('phone') }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="title"> اسم الجهاز </label>
+                                                            <label for="title"> اسم الجهاز <span class="required_span"> *  </span>  </label>
                                                             <input required type="text" id="title"
                                                                 class="form-control" placeholder="" name="title"
                                                                 value="{{ old('title') }}">
@@ -125,7 +125,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="title"> حدد الاعطال </label>
+                                                            <label for="title"> حدد الاعطال <span class="required_span"> *  </span>  </label>
                                                             <div class="skin skin-square">
                                                                 <div
                                                                     class="col-md-12 col-sm-12 d-flex justify-content-around">
@@ -152,18 +152,18 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="price"> السعر الاولي </label>
+                                                            <label for="price"> السعر الاولي <span class="required_span"> *  </span> </label>
                                                             <input required type="number" step="0.01" id="price"
                                                                 class="form-control" placeholder="" name="price"
                                                                 value="{{ old('price') }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label for="price"> تاريخ ووقت التسليم </label>
+                                                        <label for="price"> تاريخ ووقت التسليم <span class="required_span"> *  </span>  </label>
                                                         <div class="justify-between d-flex">
                                                             <div class="form-group">
                                                                 <div class="position-relative has-icon-left">
-                                                                    <input type="date" name="date_delivery"
+                                                                    <input required type="date" name="date_delivery"
                                                                         id="timesheetinput3" class="form-control"
                                                                         value="{{ old('date_delivery') }}">
                                                                     <div class="form-control-position">
@@ -173,7 +173,7 @@
                                                             </div>
                                                             <div class="form-group">
                                                                 <div class="position-relative has-icon-left">
-                                                                    <input type="time" name="time_delivery"
+                                                                    <input required type="time" name="time_delivery"
                                                                         id="timesheetinput6" class="form-control"
                                                                         value="{{ old('time_delivery') }}">
                                                                     <div class="form-control-position">
@@ -185,8 +185,8 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="price"> الحالة </label>
-                                                            <select name="status" id="" class="form-control">
+                                                            <label for="price"> الحالة <span class="required_span"> *  </span>  </label>
+                                                            <select required name="status" id="" class="form-control">
                                                                 <option value="رف الاستلام"
                                                                     {{ old('status') == 'رف الاستلام' ? 'selected' : '' }}>
                                                                     رف الاستلام</option>
@@ -199,7 +199,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-12">
                                                         <div class="form-group">
-                                                            <label for="address"> اضافة مرفقات </label>
+                                                            <label for="address"> اضافة مرفقات <span class="required_span"> *  </span>  </label>
                                                             <input required type="file" name="files[]" class="form-control"
                                                                 multiple>
                                                         </div>
@@ -209,7 +209,7 @@
                                                 <!-- عنصر التوقيع -->
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>توقيع العميل</label>
+                                                        <label>توقيع العميل <span class="required_span"> *  </span>  </label>
                                                         <div id="signature-pad" class="signature-pad">
                                                             <div class="signature-pad-body">
                                                                 <canvas></canvas>

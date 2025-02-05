@@ -60,10 +60,10 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($problems as $problem)
+                                            @foreach ($checks as $check)
                                                 @php
                                                     $checkResult = $invoice->checkResults
-                                                        ->where('problem_id', $problem->id)
+                                                        ->where('problem_id', $check->id)
                                                         ->where('invoice_id', $invoice->id)
                                                         ->first();
                                                 @endphp
@@ -71,18 +71,18 @@
                                                     <td> {{ $loop->iteration }}</td>
                                                     <td>
                                                         <input readonly disabled type="hidden" name="problem_id[]"
-                                                            value="{{ $problem->id }}">
-                                                        <input readonly type="text" value="{{ $problem->name }}"
+                                                            value="{{ $check->id }}">
+                                                        <input readonly type="text" value="{{ $check->name }}"
                                                             class="form-control" name="check_problem_name[]">
                                                     </td>
                                                     <td>
                                                         <input readonly disabled type="radio" value="1" class="form-control"
-                                                            name="work_{{ $problem->id }}[]"
+                                                            name="work_{{ $check->id }}[]"
                                                             {{ isset($checkResult) && $checkResult->work == 1 ? 'checked' : '' }}>
                                                     </td>
                                                     <td>
                                                         <input readonly disabled type="radio" value="0" class="form-control"
-                                                            name="work_{{ $problem->id }}[]"
+                                                            name="work_{{ $check->id }}[]"
                                                             {{ isset($checkResult) && $checkResult->work == 0 ? 'checked' : '' }}>
                                                     </td>
                                                     <td>
@@ -150,6 +150,9 @@
                                                                 <option
                                                                     {{ $invoice->status == 'لم يتم الاصلاح' ? 'selected' : '' }}
                                                                     value="لم يتم الاصلاح">لم يتم الاصلاح</option>
+                                                                <option
+                                                                    {{ $invoice->status == 'معلق' ? 'selected' : '' }}
+                                                                    value="معلق">معلق</option>
                                                             </select>
                                                         </div>
                                                     </div>

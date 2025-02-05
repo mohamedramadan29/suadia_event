@@ -46,7 +46,7 @@
                                             <div class="form-body">
                                                 <!--################### Start Add ChecksResults ###################-->
                                                 <div class="row">
-                                                    <h5> فحص الجهاز </h5>
+                                                    <h5> فحص الجهاز <span class="required_span"> * </span> </h5>
                                                     <table class="table">
                                                         <thead>
                                                             <tr>
@@ -59,10 +59,10 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach ($problems as $problem)
+                                                            @foreach ($checks as $check)
                                                                 @php
                                                                     $checkResult = $invoice->checkResults
-                                                                        ->where('problem_id', $problem->id)
+                                                                        ->where('problem_id', $check->id)
                                                                         ->where('invoice_id', $invoice->id)
                                                                         ->first();
                                                                 @endphp
@@ -70,22 +70,22 @@
                                                                     <td> {{ $loop->iteration }}</td>
                                                                     <td>
                                                                         <input type="hidden" name="problem_id[]"
-                                                                            value="{{ $problem->id }}">
+                                                                            value="{{ $check->id }}">
                                                                         <input readonly type="text"
-                                                                            value="{{ $problem->name }}"
+                                                                            value="{{ $check->name }}"
                                                                             class="form-control"
                                                                             name="check_problem_name[]">
                                                                     </td>
                                                                     <td>
                                                                         <input type="radio" value="1"
                                                                             class="form-control"
-                                                                            name="work_{{ $problem->id }}[]"
+                                                                            name="work_{{ $check->id }}[]"
                                                                             {{ isset($checkResult) && $checkResult->work == 1 ? 'checked' : '' }}>
                                                                     </td>
                                                                     <td>
                                                                         <input type="radio" value="0"
                                                                             class="form-control"
-                                                                            name="work_{{ $problem->id }}[]"
+                                                                            name="work_{{ $check->id }}[]"
                                                                             {{ isset($checkResult) && $checkResult->work == 0 ? 'checked' : '' }}>
                                                                     </td>
                                                                     <td>
@@ -107,7 +107,7 @@
                                                 <div class="row">
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="name"> اسم العميل </label>
+                                                            <label for="name"> اسم العميل <span class="required_span"> * </span> </label>
                                                             <input required type="text" id="name"
                                                                 class="form-control" placeholder="" name="name"
                                                                 value="{{ $invoice->name }}">
@@ -115,7 +115,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="phone"> رقم الهاتف </label>
+                                                            <label for="phone"> رقم الهاتف <span class="required_span"> * </span> </label>
                                                             <input required type="text" id="phone"
                                                                 class="form-control" placeholder="" name="phone"
                                                                 value="{{ $invoice->phone }}">
@@ -123,7 +123,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="title"> اسم الجهاز </label>
+                                                            <label for="title"> اسم الجهاز <span class="required_span"> * </span> </label>
                                                             <input required type="text" id="title"
                                                                 class="form-control" placeholder="" name="title"
                                                                 value="{{ $invoice->title }}">
@@ -131,7 +131,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="title"> حدد الاعطال </label>
+                                                            <label for="title"> حدد الاعطال <span class="required_span"> * </span> </label>
                                                             <div class="skin skin-square">
                                                                 <div
                                                                     class="col-md-12 col-sm-12 d-flex justify-content-around">
@@ -159,14 +159,14 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="form-group">
-                                                            <label for="price"> السعر الاولي </label>
+                                                            <label for="price"> السعر الاولي <span class="required_span"> * </span> </label>
                                                             <input required type="number" step="0.01" id="price"
                                                                 class="form-control" placeholder="" name="price"
                                                                 value="{{ $invoice->price }}">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label for="price"> تاريخ ووقت التسليم </label>
+                                                        <label for="price"> تاريخ ووقت التسليم <span class="required_span"> * </span> </label>
                                                         <div class="justify-between d-flex">
                                                             <div class="form-group">
                                                                 <div class="position-relative has-icon-left">
@@ -205,7 +205,7 @@
                                                 <div class="row">
                                                     <div class="col-lg-12">
                                                         <div class="form-group">
-                                                            <label for="address"> اضافة مرفقات </label>
+                                                            <label for="address"> اضافة مرفقات <span class="required_span"> * </span> </label>
                                                             <input type="file" name="files[]" class="form-control"
                                                                 multiple>
                                                         </div>

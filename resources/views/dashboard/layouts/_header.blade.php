@@ -49,7 +49,7 @@
 
                         </div>
                     </li>
-                    <li class="dropdown dropdown-notification nav-item">
+                    {{-- <li class="dropdown dropdown-notification nav-item">
                         <a class="nav-link nav-link-label" href="#" data-toggle="dropdown"><i
                                 class="ficon ft-bell"></i>
                             <span class="badge badge-pill badge-default badge-danger badge-up badge-glow">5</span>
@@ -144,7 +144,7 @@
                             <li class="dropdown-menu-footer"><a class="text-center dropdown-item text-muted"
                                     href="javascript:void(0)">Read all notifications</a></li>
                         </ul>
-                    </li>
+                    </li> --}}
                 </ul>
             </div>
         </div>

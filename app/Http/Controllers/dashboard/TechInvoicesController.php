@@ -9,6 +9,7 @@ use App\Http\Traits\Message_Trait;
 use App\Http\Traits\Upload_Images;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\dashboard\CheckText;
 use Illuminate\Support\Facades\Auth;
 use App\Models\dashboard\InvoiceImage;
 use App\Models\dashboard\InvoiceSteps;
@@ -95,7 +96,8 @@ class TechInvoicesController extends Controller
             }
         }
         $problems = ProblemCategory::all();
-        return view('dashboard.tech_invoices.update', compact('invoice', 'problems'));
+        $checks = CheckText::all();
+        return view('dashboard.tech_invoices.update', compact('invoice', 'problems','checks'));
     }
 
     public function addfile(Request $request, $id)

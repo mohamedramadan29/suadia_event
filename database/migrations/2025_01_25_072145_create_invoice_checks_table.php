@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('invoice_checks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('invoice_id')->references('id')->on('invoices')->cascadeOnDelete();
-            $table->foreignId('problem_id')->references('id')->on('problem_categories')->cascadeOnDelete();
+            $table->foreignId('problem_id')->references('id')->on('check_texts')->cascadeOnDelete();
             $table->string('problem_name');
             $table->tinyInteger('work')->default(0);
             $table->text('notes')->nullable();
@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->timestamps();
         });
     }
-    
+
     public function down(): void
     {
         Schema::dropIfExists('invoice_checks');

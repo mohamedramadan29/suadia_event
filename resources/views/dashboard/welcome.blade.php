@@ -170,6 +170,7 @@
                         </div>
                     </div>
                 @endcan
+                @if(Auth::guard('admin')->user()->type == 'فني')
                 @can('tech_invoices')
                     <div class="row">
                         <div id="recent-transactions" class="col-12">
@@ -270,6 +271,7 @@
                     </div>
                 @endcan
 
+                @endif
                 <!--/ Recent Transactions -->
             </div>
         </div>

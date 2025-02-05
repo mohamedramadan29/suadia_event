@@ -1,16 +1,18 @@
 <?php
 
+use App\Models\dashboard\CheckText;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\dashboard\AdminController;
 use App\Http\Controllers\dashboard\RolesController;
 use App\Http\Controllers\dashboard\InvoiceController;
 use App\Http\Controllers\dashboard\WelcomeController;
 use App\Http\Controllers\dashboard\auth\AuthController;
+use App\Http\Controllers\dashboard\CheckTextController;
 use App\Http\Controllers\dashboard\TechInvoicesController;
+use App\Http\Controllers\dashboard\PublicInvoiceController;
 use App\Http\Controllers\dashboard\ProblemCategoryController;
 use App\Http\Controllers\dashboard\auth\ResetPasswordController;
 use App\Http\Controllers\dashboard\auth\ForgetPasswordController;
-
 
 Route::group([
     'prefix' => '/dashboard',
@@ -23,7 +25,13 @@ Route::group([
         Route::post('register_login', 'register_login');
         Route::post('logout', 'logout')->name('logout');
     });
+
     ############################### End Auth Login Controller ###############
+    ############################## Public Invoice Controller ###############
+    Route::controller(PublicInvoiceController::class)->group(function () {
+        Route::get('invoice/view/{id}', 'PublicInvoice')->name('show_invoice');
+    });
+    ############################## End Public Invoice Controller ############
     ################### Reset Password #############
     Route::controller(ForgetPasswordController::class)->group(function () {
         Route::get('password/email', 'showemailform')->name('password.email');
@@ -91,6 +99,16 @@ Route::group([
             });
         });
         ##################### End Problem Category ###################
+         ###################### Start Check Text  #################
+         Route::group(['middleware' => 'can:problem_categories', 'prefix' => 'check_text', 'as' => 'check_text.'], function () {
+            Route::controller(CheckTextController::class)->group(function () {
+                Route::get('index', 'index')->name('index');
+                Route::match(['get', 'post'], 'create', 'create')->name('create');
+                Route::match(['post', 'get'], 'update/{id}', 'update')->name('update');
+                Route::post('destroy/{id}', 'destroy')->name('destroy');
+            });
+        });
+        ##################### End Check Text  ###################
         ################### Start Invoices #######################
         Route::group(['middleware' => 'can:invoices', 'prefix' => 'invoices', 'as' => 'invoices.'], function () {
             Route::controller(InvoiceController::class)->group(function () {

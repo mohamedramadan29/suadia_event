@@ -10,6 +10,7 @@ use App\Http\Traits\Message_Trait;
 use App\Http\Traits\Upload_Images;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\dashboard\CheckText;
 use Illuminate\Support\Facades\Auth;
 use Intervention\Image\Facades\Image;
 use App\Models\dashboard\InvoiceCheck;
@@ -38,7 +39,7 @@ class InvoiceController extends Controller
         try {
             if ($request->isMethod('post')) {
                 $data = $request->all();
-                //dd($data);
+                // dd($data);
                 $rules = [
                     'name' => 'required',
                     'phone' => 'required',
@@ -68,7 +69,7 @@ class InvoiceController extends Controller
                     return redirect()->back()->withErrors($validator)->withInput();
                 }
                 // حفظ التوقيع مباشرة
-// إزالة رأس الـ Data URL
+                // إزالة رأس الـ Data URL
                 $base64Image = preg_replace('/^data:.+;base64,/', '', $request->signature);
 
                 // فك تشفير البيانات
@@ -123,31 +124,56 @@ class InvoiceController extends Controller
                         $check->invoice_id = $invoice->id;
                         $check->problem_id = $problemId;
                         $check->problem_name = $data['check_problem_name'][$index] ?? '';
-                        $check->work = isset($data['work_' . $problemId][0]) ? $data['work_' . $problemId][0] : 0;
+                        $check->work = isset($data["work_{$problemId}"]) ? reset($data["work_{$problemId}"]) : 0;
                         $check->notes = $data['notes'][$index] ?? null;
                         $check->after_check = $data['after_check'][$index] ?? null;
                         $check->save();
                     }
                 }
+
                 ########### Send Message To WhatsApp
+                // إنشاء رابط عام للفاتورة
 
-                // إرسال الرسالة عبر Rich API
-                $postData = [
-                    "contact" => [
-                        [
-                            "number" => $invoice->phone,
-                            "message" => "شكراً لك على حجز الفاتورة. رقم الفاتورة: {$invoice->invoice_number}."
-                        ]
-                    ]
-                ];
-                $response = Http::withHeaders([
-                    'Api-key' => '10e9848d-a782-4201-8af0-f4beca0e2abe',
-                    'Content-Type' => 'application/json',
-                ])->post('https://app.reach-sa.com/api/whatsapp/send', $postData);
+                $invoice_link = url('/invoice/view/' . $invoice->id);
 
-                if ($response->failed()) {
-                    throw new \Exception("فشل إرسال الرسالة: " . $response->body());
-                }
+                // تنسيق الرابط لجعله قابلًا للنقر
+                $invoice_link = "<" . $invoice_link . ">";
+                $new_phone = preg_replace('/^0/', '', $invoice->phone);
+                // إضافة رمز البلد +966
+                $new_phone = '966' . $new_phone;
+                //$new_phone = $invoice->phone;
+
+                // تنسيق رسالة واتساب بطريقة مميزة
+                $message = "📄 *تفاصيل فاتورتك* 📄\n\n";
+                $message .= "👤 *العميل:* " . $invoice->name . "\n";
+                $message .= "📞 *رقم الهاتف:* " . $invoice->phone . "\n";
+                $message .= "📅 *تاريخ التسليم:* " . $invoice->date_delivery . "\n";
+                $message .= "⏰ *وقت التسليم:* " . $invoice->time_delivery . "\n";
+                //$message .= "💰 *السعر:* " . number_format($invoice->price, 2) . " ريال\n";
+                //$message .= "📌 *حالة الفاتورة:* " . $invoice->status . "\n\n";
+                $message .= "🖋 *الملاحظات:* " . ($invoice->description ?? "لا توجد ملاحظات") . "\n\n";
+                $message .= "🔗 *رابط الفاتورة:* " . $invoice_link . "\n";
+                // تعريف المتغير
+                $params = array(
+                    'instanceid' => '138484',
+                    'token' => '573f5335-db32-422f-8a7f-efc7a18654f9',
+                    'phone' => $new_phone,
+                    'body' => $message,
+                );
+                $queryString = http_build_query($params); // تحويل المصفوفة إلى سلسلة نصية
+                $curl = curl_init();
+                curl_setopt_array($curl, array(
+                    CURLOPT_URL => "https://api.4whats.net/sendMessage/?" . $queryString, // إضافة سلسلة الاستعلام إلى عنوان URL
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 30,
+                    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "GET",
+                ));
+                $response = curl_exec($curl);
+                $err = curl_error($curl);
+                curl_close($curl);
 
                 DB::commit();
                 return $this->success_message(' تم اضافة الفاتورة بنجاح');
@@ -156,7 +182,8 @@ class InvoiceController extends Controller
             return $this->exception_message($e);
         }
         $problems = ProblemCategory::all();
-        return view('dashboard.invoices.create', compact('problems'));
+        $checks = CheckText::all();
+        return view('dashboard.invoices.create', compact('problems', 'checks'));
     }
 
     public function update(Request $request, $id)
@@ -245,8 +272,9 @@ class InvoiceController extends Controller
             return $this->exception_message($e);
         }
         $invoice = Invoice::find($id);
+        $checks = CheckText::all();
         $problems = ProblemCategory::all();
-        return view('dashboard.invoices.update', compact('invoice', 'problems'));
+        return view('dashboard.invoices.update', compact('invoice', 'problems', 'checks'));
     }
     public function destroy($id)
     {
