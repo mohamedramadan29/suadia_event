@@ -1,12 +1,12 @@
         <!-- Preloader -->
 
-        <div class="preloader"></div>
+        {{-- <div class="preloader"></div> --}}
 
         <!-- Header span -->
 
         <!-- Main Header-->
 
-        <header class="main-header">
+        <header class="main-header fixed-header">
 
             <div class="main-box">
 
@@ -14,8 +14,9 @@
 
                     <div class="logo-box">
 
-                        <div class="logo"><a href="index.html"><img src="{{ asset('assets/front/') }}/images/logo.png" alt=""
-                                    title=""></a></div>
+                        <div class="logo"><a href="{{ url('/') }}"><img
+                                    src="{{ asset('assets/front/') }}/images/logo.png" alt="" title=""></a>
+                        </div>
 
                     </div>
 
@@ -47,113 +48,49 @@
 
                             </div>
 
-
+                            @php
+                                $types = App\Models\dashboard\Eventtype::all();
+                                $visibleTypes = $types->take(4); // أول 4 أحداث
+                                $dropdownTypes = $types->skip(4); // باقي الأحداث
+                            @endphp
 
                             <div class="clearfix collapse navbar-collapse" id="navbarSupportedContent">
-
                                 <ul class="clearfix navigation">
+                                    <li class="current"><a href="{{ url('/') }}"> الرئيسية </a></li>
 
-                                    <li class="current dropdown"><a href="index.html">Home</a>
+                                    {{-- عرض أول 4 أنواع فقط --}}
+                                    @foreach ($visibleTypes as $type)
+                                        <li><a href="{{ url('events/' . $type->slug) }}"> {{ $type->type_name }} </a>
+                                        </li>
+                                    @endforeach
 
+                                    {{-- إضافة قائمة منسدلة إذا كان هناك أحداث إضافية --}}
+                                    @if ($dropdownTypes->count() > 0)
+                                        <li class="dropdown">
+                                            <a href="#">المزيد <i class="bi bi-arrow-down d-none d-sm-inline"></i>  </a>
+                                            <ul>
+                                                @foreach ($dropdownTypes as $type)
+                                                    <li><a
+                                                            href="{{ url('events/' . $type->slug) }}">{{ $type->type_name }}</a>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </li>
+                                    @endif
+
+                                    {{-- <li class="dropdown">
+                                        <a href="schedule.html">Schedule</a>
                                         <ul>
-
-                                            <li><a href="index.html">Home Classic</a></li>
-
-                                            <li><a href="index-2.html">Home Conference</a></li>
-
-                                            <li><a href="index-3.html">Home Meetup</a></li>
-
-                                            <li><a href="index-4.html">Home Page Four</a></li>
-
-                                            <li><a href="index-5.html">Home Page Five</a></li>
-
-                                            <li class="dropdown"><a href="#">Header Styles</a>
-
-                                                <ul>
-
-                                                    <li><a href="index.html">Header Style One</a></li>
-
-                                                    <li><a href="index-2.html">Header Style Two</a></li>
-
-                                                    <li><a href="index-3.html">Header Style Three</a></li>
-
-                                                    <li><a href="index-4.html">Home Page Four</a></li>
-
-                                                    <li><a href="index-5.html">Home Page Five</a></li>
-
-                                                </ul>
-
-                                            </li>
-
-                                        </ul>
-
-                                    </li>
-
-                                    <li class="dropdown"><a href="about-us.html">About</a>
-
-                                        <ul>
-
-                                            <li><a href="about-us.html">About Us</a></li>
-
-                                            <li><a href="pricing.html">Pricing</a></li>
-
-                                            <li><a href="faqs.html">FAQ's</a></li>
-
-                                            <li><a href="gallery.html">Gallery</a></li>
-
-                                            <li><a href="coming-soon.html">Coming Soon</a></li>
-
-                                        </ul>
-
-                                    </li>
-
-                                    <li class="dropdown"><a href="speakers.html">Speakers</a>
-
-                                        <ul>
-
-                                            <li><a href="speakers.html">Speakers</a></li>
-
-                                            <li><a href="speakers-detail.html">Speakers Detail</a></li>
-
-                                        </ul>
-
-                                    </li>
-
-                                    <li class="dropdown"><a href="schedule.html">Schedule</a>
-
-                                        <ul>
-
                                             <li><a href="schedule.html">Schedule</a></li>
-
                                             <li><a href="event-detail.html">Event Detail</a></li>
-
                                             <li><a href="buy-ticket.html">Buy Ticket</a></li>
-
                                         </ul>
-
                                     </li>
 
-                                    <li class="dropdown"><a href="blog-sidebar.html">Blog</a>
-
-                                        <ul>
-
-                                            <li><a href="blog-sidebar.html">Blog With Sidebar</a></li>
-
-                                            <li><a href="blog-grid.html">Blog Grid</a></li>
-
-                                            <li><a href="blog-single.html">Blog Single</a></li>
-
-                                            <li><a href="error-page.html">404 Error</a></li>
-
-                                        </ul>
-
-                                    </li>
-
-                                    <li><a href="contact.html">Contact</a></li>
-
+                                    <li><a href="{{ url('contact') }}"> تواصل معنا </a></li> --}}
                                 </ul>
-
                             </div>
+
 
                         </nav>
 
@@ -167,22 +104,22 @@
 
                             <!--Search Box-->
 
-                            <div class="search-box-outer">
+                            {{-- <div class="search-box-outer">
 
                                 <div class="search-box-btn"><span class="flaticon-search"></span></div>
 
                             </div>
-
+ --}}
 
 
                             <!-- Button Box -->
 
-                            <div class="btn-box">
+                            {{-- <div class="btn-box">
 
                                 <a href="buy-ticket.html" class="theme-btn btn-style-one"><span class="btn-title">Get
                                         Tickets</span></a>
 
-                            </div>
+                            </div> --}}
 
                         </div>
 
@@ -208,7 +145,7 @@
 
                 <nav class="menu-box">
 
-                    <div class="nav-logo"><a href="index.html"><img src="images/logo-2.png" alt=""
+                    <div class="nav-logo"><a href="{{ url('/') }}"><img src="images/logo-2.png" alt=""
                                 title=""></a></div>
 
 

@@ -16,10 +16,10 @@
 
 
 
-<link rel="shortcut icon" href="{{ asset('assets/front/') }}/images/favicon.png" type="image/x-icon">
+<link rel="shortcut icon" href="{{ asset('assets/front/') }}/images/logo.png" type="image/x-icon">
 
-<link rel="icon" href="{{ asset('assets/front/') }}/images/favicon.png" type="image/x-icon">
-
+<link rel="icon" href="{{ asset('assets/front/') }}/images/logo.png" type="image/x-icon">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 
 <!-- Responsive -->

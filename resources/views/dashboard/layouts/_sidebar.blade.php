@@ -7,6 +7,56 @@
                           data-i18n="nav.dash.main">الرئيسية</span></a>
 
               </li>
+
+              @can('admins')
+                  <li class="nav-item{{ Route::is('dashboard.collages.*') ? 'active' : '' }}"><a href="#"><i
+                              class="la la-building"></i><span class="menu-title" data-i18n="nav.users.main"> الكليات
+                          </span></a>
+                      <ul class="menu-content">
+                          <li class="{{ Route::is('dashboard.collages.index') ? 'active' : '' }}">
+                              <a class="menu-item" href="{{ route('dashboard.collages.index') }}"
+                                  data-i18n="nav.users.user_profile"> الكليات
+                              </a>
+                          </li>
+                          <li class="{{ Route::is('dashboard.collages.create') ? 'active' : '' }}">
+                              <a class="menu-item" href="{{ route('dashboard.collages.create') }}"
+                                  data-i18n="nav.users.user_cards"> اضافة كلية </a>
+                          </li>
+                      </ul>
+                  </li>
+                  <li class="nav-item{{ Route::is('dashboard.events_types.*') ? 'active' : '' }}"><a href="#"><i
+                              class="la la-building"></i><span class="menu-title" data-i18n="nav.users.main"> انواع
+                              الفعاليات
+                          </span></a>
+                      <ul class="menu-content">
+                          <li class="{{ Route::is('dashboard.events_types.index') ? 'active' : '' }}">
+                              <a class="menu-item" href="{{ route('dashboard.events_types.index') }}"
+                                  data-i18n="nav.users.user_profile"> انواع الفعاليات
+                              </a>
+                          </li>
+                          <li class="{{ Route::is('dashboard.events_types.create') ? 'active' : '' }}">
+                              <a class="menu-item" href="{{ route('dashboard.events_types.create') }}"
+                                  data-i18n="nav.users.user_cards"> اضافة نوع </a>
+                          </li>
+                      </ul>
+                  </li>
+                  <li class="nav-item{{ Route::is('dashboard.events.*') ? 'active' : '' }}"><a href="#"><i
+                              class="la la-building"></i><span class="menu-title" data-i18n="nav.users.main"> الفعاليات
+                          </span></a>
+                      <ul class="menu-content">
+                          <li class="{{ Route::is('dashboard.events.index') ? 'active' : '' }}">
+                              <a class="menu-item" href="{{ route('dashboard.events.index') }}"
+                                  data-i18n="nav.users.user_profile"> جميع الفعاليات
+                              </a>
+                          </li>
+                          <li class="{{ Route::is('dashboard.events.create') ? 'active' : '' }}">
+                              <a class="menu-item" href="{{ route('dashboard.events.create') }}"
+                                  data-i18n="nav.users.user_cards"> اضافة فعالية </a>
+                          </li>
+                      </ul>
+                  </li>
+              @endcan
+
               @can('roles')
                   <li class="nav-item {{ Route::is('dashboard.roles.*') ? 'active' : '' }}"><a href="#"><i
                               class="la la-television"></i><span class="menu-title" data-i18n="nav.role.main"> الصلاحيات
@@ -25,6 +75,7 @@
                   </li>
               @endcan
 
+
               @can('admins')
                   <li class="nav-item{{ Route::is('dashboard.admins.*') ? 'active' : '' }}"><a href="#"><i
                               class="la la-user"></i><span class="menu-title" data-i18n="nav.users.main"> الموظفين
@@ -35,11 +86,6 @@
                                   data-i18n="nav.users.user_profile"> الموظفين
                               </a>
                           </li>
-                          <li class="{{ Route::is('dashboard.admins.tech') ? 'active' : '' }}">
-                              <a class="menu-item" href="{{ route('dashboard.admins.tech') }}"
-                                  data-i18n="nav.users.user_profile"> موظفين الصيانة
-                              </a>
-                          </li>
                           <li class="{{ Route::is('dashboard.admins.create') ? 'active' : '' }}">
                               <a class="menu-item" href="{{ route('dashboard.admins.create') }}"
                                   data-i18n="nav.users.user_cards"> اضافة موظف </a>
@@ -48,73 +94,6 @@
                   </li>
               @endcan
 
-              @can('problem_categories')
-                  <li class="nav-item {{ Route::is('dashboard.problem_categories.*') ? 'active' : '' }}"><a
-                          href="#"><i class="la la-puzzle-piece"></i><span class="menu-title"
-                              data-i18n="nav.users.main"> ادارة اقسام الاعطال
-                          </span></a>
-                      <ul class="menu-content">
-                          <li class="{{ Route::is('dashboard.problem_categories.index') ? 'active' : '' }}">
-                              <a class="menu-item" href="{{ route('dashboard.problem_categories.index') }}"
-                                  data-i18n="nav.users.user_profile"> اقسام الاعطال
-                              </a>
-                          </li>
-
-                      </ul>
-                  </li>
-                  <li class="nav-item {{ Route::is('dashboard.check_text.*') ? 'active' : '' }}"><a href="#"><i
-                              class="la la-puzzle-piece"></i><span class="menu-title" data-i18n="nav.users.main"> ادارة
-                              اساسيات الفحص
-                          </span></a>
-                      <ul class="menu-content">
-                          <li class="{{ Route::is('dashboard.check_text.index') ? 'active' : '' }}">
-                              <a class="menu-item" href="{{ route('dashboard.check_text.index') }}"
-                                  data-i18n="nav.users.user_profile"> اساسيات الفحص
-                              </a>
-                          </li>
-
-                      </ul>
-                  </li>
-              @endcan
-
-              @can('invoices')
-                  <li class="nav-item {{ Route::is('dashboard.invoices.*') ? 'active' : '' }}"><a href="#"><i
-                              class="la la-file-text"></i><span class="menu-title" data-i18n="nav.users.main"> ادارة
-                              الفواتير
-                          </span></a>
-                      <ul class="menu-content">
-                          <li class="{{ Route::is('dashboard.invoices.index') ? 'active' : '' }}">
-                              <a class="menu-item" href="{{ route('dashboard.invoices.index') }}"
-                                  data-i18n="nav.users.user_profile"> جميع الفواتير
-                              </a>
-                          </li>
-                          <li class="{{ Route::is('dashboard.invoices.create') ? 'active' : '' }}">
-                              <a class="menu-item" href="{{ route('dashboard.invoices.create') }}"
-                                  data-i18n="nav.users.user_profile"> اضافة فاتورة
-                              </a>
-                          </li>
-                      </ul>
-                  </li>
-              @endcan
-              @can('tech_invoices')
-                  <li class="nav-item {{ Route::is('dashboard.tech_invoices.*') ? 'active' : '' }}"><a href="#"><i
-                              class="la la-file-text"></i><span class="menu-title" data-i18n="nav.users.main"> ادارة
-                              فواتيري
-                          </span></a>
-                      <ul class="menu-content">
-                          <li class="{{ Route::is('dashboard.tech_invoices.index') ? 'active' : '' }}">
-                              <a class="menu-item" href="{{ route('dashboard.tech_invoices.index') }}"
-                                  data-i18n="nav.users.user_profile"> فواتيري
-                              </a>
-                          </li>
-                          <li class="{{ Route::is('dashboard.invoices.create') ? 'active' : '' }}">
-                              <a class="menu-item" href="{{ route('dashboard.tech_invoices.available') }}"
-                                  data-i18n="nav.users.user_profile"> الفواتير المتاحة
-                              </a>
-                          </li>
-                      </ul>
-                  </li>
-              @endcan
 
               <li class="nav-item {{ Route::is('dashboard.update_profile.*') ? 'active' : '' }}"><a href="#"><i
                           class="la la-user"></i><span class="menu-title" data-i18n="nav.users.main"> ادارة

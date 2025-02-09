@@ -14,7 +14,7 @@
                                 <div class="border-0 card-header">
                                     <div class="text-center card-title">
                                         <img style="width: 150px" src="{{ asset('assets/admin/') }}/images/logo.png"
-                                            alt=" بصمة الاهتمام للاتصالات  ">
+                                            alt=" الفعاليات  ">
                                     </div>
                                     <h6 class="pt-2 text-center card-subtitle line-on-side text-muted font-small-3">
                                         <span> تسجيل الدخول </span>
