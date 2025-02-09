@@ -79,7 +79,7 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="name">  تاريخ ويوم البدء  </label>
-                                                            <input required type="date" id="event_start_day"
+                                                            <input required type="text" id="event_start_day"
                                                                 class="form-control" placeholder="" name="event_start_day""
                                                                 value="{{ old('event_start_day') ?? $event->event_start_day }}">
                                                         </div>
@@ -87,7 +87,7 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="name"> وقت البدء  </label>
-                                                            <input required type="time" id="event_start_time"
+                                                            <input required type="text" id="event_start_time"
                                                                 class="form-control" placeholder="" name="event_start_time""
                                                                 value="{{ old('event_start_time') ?? $event->event_start_time }}">
                                                         </div>
@@ -96,7 +96,7 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="name">  شهر الانتهاء   </label>
-                                                            <input required type="number" min="1" max="12" id="event_end_month"
+                                                            <input required type="text" min="1" max="12" id="event_end_month"
                                                                 class="form-control" placeholder="" name="event_end_month""
                                                                 value="{{ old('event_end_month') ?? $event->event_end_month }}">
                                                         </div>
@@ -104,7 +104,7 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="name">  تاريخ ويوم الانتهاء  </label>
-                                                            <input required type="date" id="event_end_day"
+                                                            <input required type="text" id="event_end_day"
                                                                 class="form-control" placeholder="" name="event_end_day"
                                                                 value="{{ old('event_end_day') ?? $event->event_end_day }}">
                                                         </div>
@@ -112,7 +112,7 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label for="name"> وقت الانتهاء  </label>
-                                                            <input required type="time" id="event_end_time"
+                                                            <input required type="text" id="event_end_time"
                                                                 class="form-control" placeholder="" name="event_end_time"
                                                                 value="{{ old('event_end_time') ?? $event->event_end_time }}">
                                                         </div>

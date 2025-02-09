@@ -8,6 +8,7 @@ use App\Models\dashboard\Admin;
 use App\Models\dashboard\Invoice;
 use App\Http\Traits\Message_Trait;
 use App\Http\Controllers\Controller;
+use App\Models\dashboard\Collage;
 use Illuminate\Support\Facades\Hash;
 use App\Models\dashboard\ProblemCategory;
 use Illuminate\Support\Facades\Validator;
@@ -34,7 +35,7 @@ class AdminController extends Controller
                 'password' => 'required',
                 'password_confirmation' => 'required|same:password',
                 'role_id' => 'required',
-                'type' => 'required',
+                'collage_id'=>'required'
             ];
             $messages = [
                 'name.required' => 'من فضلك ادخل اسم المستخدم ',
@@ -45,7 +46,7 @@ class AdminController extends Controller
                 'password_confirmation.required' => 'من فضلك ادخل تاكيد كلمة المرور ',
                 'password_confirmation.same' => 'كلمة المرور غير متطابقة ',
                 'role_id.required' => 'من فضلك ادخل صلاحيات المستخدم ',
-                'type.required' => 'من فضلك ادخل نوع المستخدم ',
+                'collage_id.required' => 'من فضلك ادخل الكلية ',
             ];
             $validator = Validator::make($data, $rules, $messages);
             if ($validator->fails()) {
@@ -57,13 +58,14 @@ class AdminController extends Controller
             $admin->phone = $data['phone'];
             $admin->password = Hash::make($data['password']);
             $admin->role_id = $data['role_id'];
-            $admin->status = $data['status'];
-            $admin->type = $data['type'];
+            $admin->type = 'emp';
+            $admin->collage_id = $data['collage_id'];
             $admin->save();
             return $this->success_message('تم اضافة المستخدم بنجاح');
         }
         $roles = Role::all();
-        return view('dashboard.admins.create', compact('roles'));
+        $collages = Collage::all();
+        return view('dashboard.admins.create', compact('roles','collages'));
     }
 
     public function update(Request $request, $id)
@@ -75,16 +77,14 @@ class AdminController extends Controller
                 'name' => 'required',
                 'email' => 'required|email',
                 'phone' => 'required',
-                'role_id' => 'required',
-                'type' => 'required',
+                'collage_id'=>'required'
             ];
             $messages = [
                 'name.required' => 'من فضلك ادخل اسم المستخدم ',
                 'email.required' => 'من فضلك ادخل البريد الالكتروني ',
                 'email.email' => 'من فضلك ادخل بريد الكتروني صحيح ',
                 'phone.required' => 'من فضلك ادخل رقم الهاتف ',
-                'role_id.required' => 'من فضلك ادخل صلاحيات المستخدم ',
-                'type.required' => 'من فضلك ادخل نوع المستخدم ',
+                'collage_id.required' => 'من فضلك ادخل الكلية ',
             ];
 
             if (isset($data['password']) && $data['password'] != null) {
@@ -109,14 +109,14 @@ class AdminController extends Controller
             $admin->email = $data['email'];
             $admin->phone = $data['phone'];
             $admin->role_id = $data['role_id'];
-            $admin->type = $data['type'];
-            $admin->status = $data['status'];
+            $admin->collage_id = $data['collage_id'];
             $admin->save();
             return $this->success_message('تم تعديل المستخدم بنجاح');
         }
         $admin = Admin::find($id);
         $roles = Role::all();
-        return view('dashboard.admins.update', compact('admin', 'roles'));
+        $collages = Collage::all();
+        return view('dashboard.admins.update', compact('admin', 'roles','collages'));
     }
     public function destroy($id)
     {
@@ -127,47 +127,6 @@ class AdminController extends Controller
         }
         $admin->delete();
         return $this->success_message('تم حذف المستخدم بنجاح');
-    }
-
-    ################### Tech Admins الفنيين #######################
-    public function tech()
-    {
-        $admins = Admin::where('type', 'فني')->get();
-        $problems = ProblemCategory::all();
-        return view('dashboard.admins.tech', compact('admins', 'problems'));
-    }
-
-    public function update_tech(Request $request, $id)
-    {
-        $data = $request->all();
-        $admin = Admin::find($id);
-        if (!$admin) {
-            return $this->Error_message('لا يوجد مستخدم بهذا الرقم');
-        }
-        $admin->device_nums = $data['device_nums'];
-        $admin->problems = json_encode($data['problems']);
-        $admin->save();
-        return $this->success_message('تم تعديل الصلاحيات بنجاح');
-    }
-
-    ###################### Get The Tech Invoices #######################
-    public function tech_invoices(Request $request, $id)
-    {
-        // استخراج التاريخين من الطلب
-        $startFrom = $request->input('start_from');
-        $endTo = $request->input('end_to');
-
-        // التحقق من وجود القيم وتصفية النتائج
-        $query = Invoice::where('admin_repair_id', $id);
-
-        if ($startFrom && $endTo) {
-            $query->whereBetween('checkout_time', [$startFrom, $endTo]);
-        }
-        $invoices = $query->orderBy('id', 'desc')->paginate(10);
-        // حساب العدد الإجمالي للفواتير في الفترة المحددة
-        $totalInvoices = $query->count();
-
-        return view('dashboard.admins.tech_invoices', compact('invoices', 'id', 'totalInvoices'));
     }
 
 }

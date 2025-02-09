@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreignId('role_id')->references('id')->on('roles')->cascadeOnDelete();
             $table->boolean('status')->default(1);
             $table->rememberToken();
+            $table->integer('collage_id')->nullable();
             $table->timestamps();
         });
     }

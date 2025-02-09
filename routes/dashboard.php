@@ -115,7 +115,7 @@ Route::group([
 
         ##################### Start Events  Routes #########################
 
-        Route::group(['middleware' => 'can:admins', 'prefix' => 'events', 'as' => 'events.'], routes: function () {
+        Route::group(['middleware' => 'can:events', 'prefix' => 'events', 'as' => 'events.'], routes: function () {
             Route::controller(EventController::class)->group(function () {
                 Route::get('index', 'index')->name('index');
                 Route::match(['get', 'post'], 'create', 'create')->name('create');

@@ -1,7 +1,8 @@
 @extends('front.layouts.app')
 
-@section('title', 'الرئيسية - جامعة الملك عبد العزيز')
-
+@section('title')
+{{ $event_type->type_name }}
+@endsection
 @section('content')
     <!-- Banner Section -->
 
@@ -10,7 +11,7 @@
         <div class="banner-carousel owl-carousel owl-theme">
 
             <div class="slide-item"
-                style="background-image: url({{ asset('assets/front/images/banners/' . $event_type->banner) }});">
+                style="background-image: url({{ asset('assets/uploads/event_banners/' . $event_type->banner) }});">
             </div>
 
         </div>
@@ -30,7 +31,13 @@
                         <div class="event-box">
                             <div class="event-card">
                                 <!-- صورة الحدث مع التدرج -->
-                                <img src="{{ asset('assets/front/images/uploads/event.jpg') }}" alt="Event Image">
+                                @if ($event->event_image != null)
+                                <img src="{{ asset('assets/uploads/events/' . $event->event_image) }}"
+                                    alt="{{ $event->event_name }}">
+                            @else
+                                <img src="{{ asset('assets/front/images/uploads/event.jpg') }}"
+                                    alt="{{ $event->event_name }}">
+                            @endif
                                 <div class="overlay" style="background:linear-gradient(to left, {{ $event_type->color }}, rgb(199 204 236 / 57%))"></div>
                                 <div class="event-info">
                                     <h3> {{ $event->event_name }} </h3>
@@ -48,7 +55,7 @@
                                 </div>
 
                                 <div style="display: flex">
-                                    <p><strong> <i class="bi bi-calendar-event"></i> الي : </strong>
+                                    <p><strong> <i class="bi bi-calendar-event"></i> إلى : </strong>
                                     <p style="display: flex"> <span> {{ $event->event_end_day }} </span> | <span>
                                             {{ $event->formatted_end_time }}</span> </p>
                                 </div>

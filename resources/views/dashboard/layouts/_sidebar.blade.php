@@ -40,6 +40,9 @@
                           </li>
                       </ul>
                   </li>
+              @endcan
+
+              @can('events')
                   <li class="nav-item{{ Route::is('dashboard.events.*') ? 'active' : '' }}"><a href="#"><i
                               class="la la-building"></i><span class="menu-title" data-i18n="nav.users.main"> الفعاليات
                           </span></a>

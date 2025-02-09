@@ -32,6 +32,10 @@ class Admin extends Authenticatable
         ];
     }
 
+    public function collage(){
+        return $this->belongsTo(Collage::class,'collage_id');
+    }
+
     public function Role()
     {
         return $this->belongsTo(Role::class, 'role_id');
@@ -51,6 +55,6 @@ class Admin extends Authenticatable
             }
         }
     }
- 
+
 
 }

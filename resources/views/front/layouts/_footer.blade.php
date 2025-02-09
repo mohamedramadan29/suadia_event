@@ -96,18 +96,21 @@
                                 <h2 class="widget-title"> الفعاليات </h2>
 
                                 <!--Footer Column-->
-
+                                @php
+                                    $types = App\Models\dashboard\Eventtype::all();
+                                    $visibleTypes = $types->take(6); // أول 4 أحداث
+                                    $dropdownTypes = $types->skip(6); // باقي الأحداث
+                                @endphp
                                 <div class="widget-content">
 
                                     <ul class="user-links">
 
-                                        <li><a href="{{ url('/') }}"> موتمرات  </a></li>
+                                        @foreach ($visibleTypes as $type)
+                                            <li><a href="{{ url('events/' . $type->slug) }}"> {{ $type->type_name }}
+                                                </a>
+                                            </li>
+                                        @endforeach
 
-                                        <li><a href="{{ url('/contact') }}">  ملتقي  </a></li>
-                                        <li><a href="{{ url('/contact') }}">  مهرجان   </a></li>
-                                        <li><a href="{{ url('/contact') }}">  مهرجان   </a></li>
-                                        <li><a href="{{ url('/contact') }}">  مهرجان   </a></li>
-                                        <li><a href="{{ url('/contact') }}">  مهرجان   </a></li>
 
                                     </ul>
 
@@ -130,14 +133,19 @@
                                 <div class="widget-content">
 
                                     <ul class="user-links">
+                                        @if ($dropdownTypes->count() > 0)
+                                            <li class="dropdown">
+                                                <ul>
+                                                    @foreach ($dropdownTypes as $type)
 
-                                        <li><a href="{{ url('/') }}"> موتمرات  </a></li>
-
-                                        <li><a href="{{ url('/contact') }}">  ملتقي  </a></li>
-                                        <li><a href="{{ url('/contact') }}">  مهرجان   </a></li>
-                                        <li><a href="{{ url('/contact') }}">  مهرجان   </a></li>
-                                        <li><a href="{{ url('/contact') }}">  مهرجان   </a></li>
-                                        <li><a href="{{ url('/contact') }}">  مهرجان   </a></li>
+                                                        <li>
+                                                            <a
+                                                                href="{{ url('events/' . $type->slug) }}">{{ $type->type_name }}</a>
+                                                        </li>
+                                                    @endforeach
+                                                </ul>
+                                            </li>
+                                        @endif
 
                                     </ul>
 
@@ -173,7 +181,7 @@
 
                 <div class="copyright-text">
 
-                    <p> جميع الحقوق محفوظة لدي   <a href="{{ url('/') }}">  جامعة الملك عبدالعزيز  </a></p>
+                    <p> جميع الحقوق محفوظة لـ جامعة الملك عبدالعزيز </p>
 
                 </div>
 

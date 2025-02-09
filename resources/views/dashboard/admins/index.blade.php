@@ -40,9 +40,8 @@
                                                     <th> الاسم </th>
                                                     <th> البريد الالكتروني </th>
                                                     <th> رقم الهاتف </th>
-                                                    <th> نوع الموظف </th>
+                                                    <th> الكلية  </th>
                                                     <th> الصلاحية </th>
-                                                    <th> الحالة </th>
                                                     <th> العمليات </th>
                                                 </tr>
                                             </thead>
@@ -57,15 +56,11 @@
                                                         <td>
                                                             {{ $admin->phone }}
                                                         </td>
-                                                        <td>
-                                                            <span class="badge badge-success"> {{ $admin->type }} </span>
-                                                        </td>
+                                                        <td>{{ $admin->collage_id ? $admin->collage->name : ' الكل  ' }}</td>
                                                         <td>
                                                             {{ $admin->role->role }}
                                                         </td>
-                                                        <td>
-                                                            {{ $admin->status == 1 ? 'مفعل' : 'غير مفعل' }}
-                                                        </td>
+
                                                         <td>
                                                             <a class="btn btn-info btn-sm"
                                                                 href="{{ route('dashboard.admins.update', $admin->id) }}"><i

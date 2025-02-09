@@ -51,11 +51,11 @@
                                                         <th scope="row">{{ $loop->iteration }}</th>
                                                         <td> {{ $type->type_name }} </td>
                                                         <td> <img width="50px"
-                                                                src="{{ asset('assets/front/images/types/' . $type->image) }}"
+                                                                src="{{ asset('assets/uploads/event_icons/' . $type->image ?? '') }}"
                                                                 alt=""> </td>
                                                         <td> {{ $type->color }} </td>
                                                         <td> <img width="60px"
-                                                                src="{{ asset('assets/front/images/banners/' . $type->banner) }}"
+                                                                src="{{ asset('assets/uploads/event_banners/' . $type->banner ?? '') }}"
                                                                 alt=""> </td>
                                                         <td>
                                                             <a class="btn btn-info btn-sm"

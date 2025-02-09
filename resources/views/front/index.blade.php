@@ -1,6 +1,6 @@
 @extends('front.layouts.app')
 
-@section('title', 'الرئيسية - جامعة الملك عبد العزيز')
+@section('title', '  الرئيسية - تقويم فعاليات جامعة الملك عبد العزيز')
 
 @section('content')
     <!-- Banner Section -->
@@ -12,87 +12,13 @@
             <!-- Slide Item -->
 
             <div class="slide-item" style="background-image: url({{ asset('assets/front/images/banners/1.jpg') }});">
-
-                {{-- <div class="auto-container">
-
-                        <div class="content-box">
-
-                            <span class="title">January 20, 2025</span>
-
-                            <h2> World Digital <br>Conference 2025</h2>
-
-                            <ul class="info-list">
-
-                                <li><span class="icon fa fa-chair"></span> 5000 Seats</li>
-
-                                <li><span class="icon fa fa-user-alt"></span> 12 SPEAKERS</li>
-
-                                <li><span class="icon fa fa-map-marker-alt"></span> Palo, California</li>
-
-                            </ul>
-
-                            <div class="btn-box"><a href="buy-ticket.html" class="theme-btn btn-style-two"><span
-                                        class="btn-title">Book Now</span></a></div>
-
-                        </div>
-
-                    </div> --}}
-
             </div>
             <!-- Slide Item -->
-
-            <div class="slide-item" style="background-image: url({{ asset('assets/front/images/banners/2.jpg') }});">
-
-                {{-- <div class="auto-container">
-
-                        <div class="content-box">
-
-                            <span class="title">January 20, 2025</span>
-
-                            <h2> World Digital <br>Conference 2025</h2>
-
-                            <ul class="info-list">
-
-                                <li><span class="icon fa fa-chair"></span> 5000 Seats</li>
-
-                                <li><span class="icon fa fa-user-alt"></span> 12 SPEAKERS</li>
-
-                                <li><span class="icon fa fa-map-marker-alt"></span> Palo, California</li>
-
-                            </ul>
-
-                            <div class="btn-box"><a href="buy-ticket.html" class="theme-btn btn-style-two"><span
-                                        class="btn-title">Book Now</span></a></div>
-
-                        </div>
-
-                    </div> --}}
-
-            </div>
-
-            <div class="slide-item" style="background-image: url({{ asset('assets/front/images/banners/3.jpg') }});">
-            </div>
-            <div class="slide-item" style="background-image: url({{ asset('assets/front/images/banners/4.jpg') }});">
-            </div>
-            <div class="slide-item" style="background-image: url({{ asset('assets/front/images/banners/5.jpg') }});">
-            </div>
-            <div class="slide-item" style="background-image: url({{ asset('assets/front/images/banners/6.jpg') }});">
-            </div>
-            <div class="slide-item" style="background-image: url({{ asset('assets/front/images/banners/7.jpg') }});">
-            </div>
-            <div class="slide-item" style="background-image: url({{ asset('assets/front/images/banners/8.jpg') }});">
-            </div>
-            <div class="slide-item" style="background-image: url({{ asset('assets/front/images/banners/9.jpg') }});">
-            </div>
-            <div class="slide-item" style="background-image: url({{ asset('assets/front/images/banners/10.jpg') }});">
-            </div>
-            <div class="slide-item" style="background-image: url({{ asset('assets/front/images/banners/11.jpg') }});">
-            </div>
-            <div class="slide-item" style="background-image: url({{ asset('assets/front/images/banners/12.jpg') }});">
-            </div>
-            <div class="slide-item" style="background-image: url({{ asset('assets/front/images/banners/13.jpg') }});">
-            </div>
-
+            @foreach ($event_types as $type)
+                <div class="slide-item"
+                    style="background-image: url({{ asset('assets/uploads/event_banners/' . $type->banner ?? '') }});">
+                </div>
+            @endforeach
         </div>
 
     </section>
@@ -133,7 +59,8 @@
                         <div class="client-block col-lg-2 col-md-6 col-6">
                             <figure class="image-box">
                                 <a href="{{ url('events/' . $type->slug) }}">
-                                    <img src="{{ asset('assets/front/images/types/' . $type->image) }}" alt="">
+                                    <img src="{{ asset('assets/uploads/event_icons/' . $type->image ?? '') }}"
+                                        alt="">
                                     <h4> {{ $type->type_name }} </h4>
                                 </a>
                             </figure>
@@ -154,9 +81,10 @@
             //use Carbon\Carbon;
 
             $events = App\Models\dashboard\Event::where('event_type_id', $type['id'])
-                ->orderBy('event_start_month','asc')
-                ->orderBy('event_start_day','asc')->
-                limit(3)->get()
+                ->orderBy('event_start_month', 'asc')
+                ->orderBy('event_start_day', 'asc')
+                ->limit(3)
+                ->get()
                 ->map(function ($event) {
                     // تنظيف الوقت من المسافات الزائدة
                     $start_time = trim($event->event_start_time);
@@ -165,7 +93,9 @@
                     // تحويل الوقت إلى صيغة 12 ساعة مع صباحًا/مساءً
                     try {
                         $event->formatted_start_time =
-                        Carbon\Carbon::createFromFormat('h:iA', $start_time)->locale('ar')->translatedFormat('h:i') .
+                            Carbon\Carbon::createFromFormat('h:iA', $start_time)
+                                ->locale('ar')
+                                ->translatedFormat('h:i') .
                             (strpos($start_time, 'AM') !== false ? ' صباحًا' : ' مساءً');
                     } catch (\Exception $e) {
                         $event->formatted_start_time = 'وقت غير صحيح';
@@ -173,7 +103,7 @@
 
                     try {
                         $event->formatted_end_time =
-                        Carbon\Carbon::createFromFormat('h:iA', $end_time)->locale('ar')->translatedFormat('h:i') .
+                            Carbon\Carbon::createFromFormat('h:iA', $end_time)->locale('ar')->translatedFormat('h:i') .
                             (strpos($end_time, 'AM') !== false ? ' صباحًا' : ' مساءً');
                     } catch (\Exception $e) {
                         $event->formatted_end_time = 'وقت غير صحيح';
@@ -196,8 +126,16 @@
                         <div class="col-lg-4 col-md-6 col-sm-12 wow fadeInRight event">
                             <div class="event-box">
                                 <div class="event-card">
+
                                     <!-- صورة الحدث مع التدرج -->
-                                    <img src="{{ asset('assets/front/images/uploads/event.jpg') }}" alt="Event Image">
+                                    @if ($event->event_image != null)
+                                        <img src="{{ asset('assets/uploads/events/' . $event->event_image) }}"
+                                            alt="{{ $event->event_name }}">
+                                    @else
+                                        <img src="{{ asset('assets/front/images/uploads/event.jpg') }}"
+                                            alt="{{ $event->event_name }}">
+                                    @endif
+                                    {{-- <img src="{{ asset('assets/front/images/uploads/event.jpg') }}" alt="{{ $event->event_name }}"> --}}
                                     <div class="overlay"
                                         style="background:linear-gradient(to left, {{ $type->color }}, rgb(199 204 236 / 57%))">
                                     </div>
@@ -216,7 +154,7 @@
                                         </p>
                                     </div>
                                     <div style="display: flex">
-                                        <p><strong> <i class="bi bi-calendar-event"></i> الي : </strong>
+                                        <p><strong> <i class="bi bi-calendar-event"></i> إلى : </strong>
                                         <p style="display: flex"> <span> {{ $event->event_end_day }} </span> | <span>
                                                 {{ $event->formatted_end_time }}</span> </p>
                                     </div>

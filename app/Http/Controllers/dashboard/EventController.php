@@ -10,8 +10,9 @@ use App\Http\Traits\Message_Trait;
 use App\Http\Traits\Upload_Images;
 use App\Models\dashboard\Eventtype;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-
+use Carbon\Carbon;
 class EventController extends Controller
 {
     use Message_Trait;
@@ -19,7 +20,11 @@ class EventController extends Controller
     use Upload_Images;
     public function index()
     {
-        $events = Event::orderBy('id', 'desc')->paginate(12);
+        if (Auth::guard('admin')->user()->type != 'admin') {
+            $events = Event::where('collage_id', Auth::guard('admin')->user()->collage_id)->orderBy('id', 'desc')->paginate(12);
+        } else {
+            $events = Event::orderBy('id', 'desc')->paginate(12);
+        }
         return view("dashboard.events.index", compact('events'));
     }
 
@@ -66,18 +71,28 @@ class EventController extends Controller
             $event->event_slug = $this->CustomeSlug($data['event_name']);
             $event->event_location = $data['event_location'];
             $event->event_start_month = $data['event_start_month'];
-            $event->event_start_day = $data['event_start_day'];
-            $event->event_start_time = $data['event_start_time'];
+            //$event->event_start_day = $data['event_start_day'];
+            $event->event_start_day = Carbon::parse($data['event_start_day'])->format('d-M, Y');
+           // $event->event_start_time = $data['event_start_time'];
+            $event->event_start_time = Carbon::parse($data['event_start_time'])->format('h:iA');
             $event->event_end_month = $data['event_end_month'];
-            $event->event_end_day = $data['event_end_day'];
-            $event->event_end_time = $data['event_end_time'];
+          //  $event->event_end_day = $data['event_end_day'];
+            $event->event_end_day = Carbon::parse($data['event_end_day'])->format('d-M, Y');
+           // $event->event_end_time = $data['event_end_time'];
+            $event->event_end_time = Carbon::parse($data['event_end_time'])->format('h:iA');
+
             $event->event_type_id = $data['event_type_id'];
             $event->event_status = $data['event_status'];
             $event->event_image = $event_image;
             $event->save();
             return $this->success_message(' تم اضافة الحدث بنجاح');
         }
-        $collages = Collage::all();
+        if (Auth::guard('admin')->user()->type != 'admin') {
+            $collages = Collage::where('id', Auth::guard('admin')->user()->collage_id)->get();
+        } else {
+            $collages = Collage::all();
+        }
+
         $types = Eventtype::all();
         return view('dashboard.events.store', compact('collages', 'types'));
     }
@@ -85,7 +100,12 @@ class EventController extends Controller
     public function update(Request $request, $id)
     {
         $event = Event::findOrFail($id);
-        $collages = Collage::all();
+        if (Auth::guard('admin')->user()->type != 'admin') {
+            $collages = Collage::where('id', Auth::guard('admin')->user()->collage_id)->get();
+        } else {
+            $collages = Collage::all();
+        }
+
         $types = Eventtype::all();
         if ($request->isMethod('post')) {
             $data = $request->all();
@@ -135,18 +155,18 @@ class EventController extends Controller
             $event->event_slug = $this->CustomeSlug($data['event_name']);
             $event->event_location = $data['event_location'];
             $event->event_start_month = $data['event_start_month'];
-            $event->event_start_day = $data['event_start_day'];
-            $event->event_start_time = $data['event_start_time'];
+            $event->event_start_day = Carbon::parse($data['event_start_day'])->format('d-M, Y');
+            $event->event_start_time = Carbon::parse($data['event_start_time'])->format('h:iA');
             $event->event_end_month = $data['event_end_month'];
-            $event->event_end_day = $data['event_end_day'];
-            $event->event_end_time = $data['event_end_time'];
+            $event->event_end_day = Carbon::parse($data['event_end_day'])->format('d-M, Y');
+            $event->event_end_time = Carbon::parse($data['event_end_time'])->format('h:iA');
             $event->event_type_id = $data['event_type_id'];
             $event->event_status = $data['event_status'];
             //$event->event_image = $event_image;
             $event->save();
             return $this->success_message(' تم تعديل الحدث بنجاح');
         }
-        return view('dashboard.events.update', compact('event','collages', 'types'));
+        return view('dashboard.events.update', compact('event', 'collages', 'types'));
     }
 
     public function destroy($id)

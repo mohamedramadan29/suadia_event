@@ -48,6 +48,7 @@
                                                     <th> وقت الانتهاء </th>
                                                     <th> نوع الفعالية  </th>
                                                     <th> حالة الفعالية </th>
+                                                    <th> صورة الفعالية </th>
                                                     <th> العمليات </th>
                                                 </tr>
                                             </thead>
@@ -66,6 +67,7 @@
                                                         <td> {{ $event->event_end_time }}  </td>
                                                         <td> {{ $event->type->type_name }} </td>
                                                         <td> {{ $event->event_status }} </td>
+                                                        <td> <img width="80px" src="{{ asset('assets/uploads/events/' . $event->event_image ?? '')  }}" alt=""></td>
                                                         <td>
                                                             <a class="btn btn-info btn-sm"
                                                                 href="{{ route('dashboard.events.update', $event->id) }}"><i
