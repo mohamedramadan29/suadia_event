@@ -10,6 +10,8 @@ class Event extends Model
 
     protected $guarded = [];
 
+    public $timestamps = false;
+
     public function colage(){
         return $this->belongsTo(Collage::class,'collage_id');
     }

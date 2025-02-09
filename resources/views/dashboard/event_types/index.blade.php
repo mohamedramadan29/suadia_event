@@ -28,7 +28,8 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <a href="#" class="btn btn-primary"> اضافة نوع </a>
+                                <a href="{{ route('dashboard.events_types.create') }}" class="btn btn-primary"> اضافة نوع
+                                </a>
                             </div>
                             <div class="card-content collapse show">
                                 <div class="card-body">
@@ -40,7 +41,7 @@
                                                     <th> الاسم </th>
                                                     <th> الصورة </th>
                                                     <th> اللون </th>
-                                                    <th> البانر  </th>
+                                                    <th> البانر </th>
                                                     <th> العمليات </th>
                                                 </tr>
                                             </thead>
@@ -53,24 +54,21 @@
                                                                 src="{{ asset('assets/front/images/types/' . $type->image) }}"
                                                                 alt=""> </td>
                                                         <td> {{ $type->color }} </td>
-                                                        <td> <img width="60px" src="{{ asset('assets/front/images/banners/' . $type->banner)  }}" alt=""> </td>
+                                                        <td> <img width="60px"
+                                                                src="{{ asset('assets/front/images/banners/' . $type->banner) }}"
+                                                                alt=""> </td>
                                                         <td>
-                                                            {{-- <a class="btn btn-info btn-sm"
-                                                                href="{{ route('dashboard.admins.update', $admin->id) }}"><i
+                                                            <a class="btn btn-info btn-sm"
+                                                                href="{{ route('dashboard.events_types.update', $type->id) }}"><i
                                                                     class="la la-edit"></i> تعديل </a>
                                                             <button type="button" class="btn btn-danger btn-sm"
                                                                 data-toggle="modal"
-                                                                data-target="#delete_admin_{{ $admin->id }}">
+                                                                data-target="#delete_type_{{ $type->id }}">
                                                                 حذف <i class="la la-trash"></i>
-                                                            </button> --}}
+                                                            </button>
                                                         </td>
                                                     </tr>
-                                                    <div class="form-group">
-
-
-
-                                                    </div>
-                                                    {{-- @include('dashboard.admins.delete') --}}
+                                                    @include('dashboard.Event_types.delete')
                                                 @empty
                                                     <td colspan="4"> لا يوجد بيانات </td>
                                                 @endforelse

@@ -28,7 +28,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <a href="#" class="btn btn-primary"> اضافة كلية </a>
+                                <a href="{{ route('dashboard.collages.create') }}" class="btn btn-primary"> اضافة كلية </a>
                             </div>
                             <div class="card-content collapse show">
                                 <div class="card-body">
@@ -56,14 +56,14 @@
                                                         </td>
 
                                                         <td>
-                                                            {{-- <a class="btn btn-info btn-sm"
-                                                                href="{{ route('dashboard.admins.update', $admin->id) }}"><i
+                                                            <a class="btn btn-info btn-sm"
+                                                                href="{{ route('dashboard.collages.update', $colage->id) }}"><i
                                                                     class="la la-edit"></i> تعديل </a>
                                                             <button type="button" class="btn btn-danger btn-sm"
                                                                 data-toggle="modal"
-                                                                data-target="#delete_admin_{{ $admin->id }}">
+                                                                data-target="#delete_collage_{{ $colage->id }}">
                                                                 حذف <i class="la la-trash"></i>
-                                                            </button> --}}
+                                                            </button>
                                                         </td>
                                                     </tr>
                                                     <div class="form-group">
@@ -71,7 +71,7 @@
 
 
                                                     </div>
-                                                    {{-- @include('dashboard.admins.delete') --}}
+                                                    @include('dashboard.collages.delete')
                                                 @empty
                                                     <td colspan="4"> لا يوجد بيانات </td>
                                                 @endforelse
