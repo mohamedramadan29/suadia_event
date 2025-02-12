@@ -14,4 +14,5 @@ Route::controller(FrontController::class)->group(function () {
 
 Route::controller(EventController::class)->group(function () {
     Route::get('events/{slug}', 'event');
+    Route::get('allevent', 'AllEvents');
 });

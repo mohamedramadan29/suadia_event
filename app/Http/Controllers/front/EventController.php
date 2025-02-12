@@ -44,4 +44,52 @@ class EventController extends Controller
 
         return view('front.event', compact('event_type', 'events'));
     }
+
+    public function AllEvents()
+    {
+        $events = Event::orderBy('event_start_month', 'asc')
+            ->orderBy('event_start_day', 'asc')
+            ->get()
+            ->map(function ($event) {
+                // تنظيف الوقت من المسافات الزائدة
+                $start_time = trim($event->event_start_time);
+                $end_time = trim($event->event_end_time);
+
+                // التحقق من تنسيق الوقت وتحويله إلى 12 ساعة مع صباحًا/مساءً
+                $event->formatted_start_time = $this->formatTimeToArabic($start_time);
+                $event->formatted_end_time = $this->formatTimeToArabic($end_time);
+
+                return $event;
+            });
+
+        // تجميع الأحداث حسب الشهر
+        $groupedEvents = $events->groupBy('event_start_month');
+
+        return view('front.allevent', compact('groupedEvents'));
+    }
+
+    /**
+     * دالة لتحويل الوقت إلى 12 ساعة مع صباحًا/مساءً
+     */
+    private function formatTimeToArabic($time)
+    {
+        if (!$time) {
+            return 'وقت غير صحيح';
+        }
+
+        try {
+            // المحاولة باستخدام تنسيق 24 ساعة
+            $date = Carbon::createFromFormat('H:i', $time);
+        } catch (\Exception $e) {
+            try {
+                // المحاولة باستخدام تنسيق 12 ساعة مع AM/PM
+                $date = Carbon::createFromFormat('h:i A', $time);
+            } catch (\Exception $e) {
+                return 'وقت غير صحيح';
+            }
+        }
+
+        return $date->format('h:i') . ($date->format('A') == 'AM' ? ' صباحًا' : ' مساءً');
+    }
+
 }
